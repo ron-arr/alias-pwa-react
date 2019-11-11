@@ -1,0 +1,20 @@
+html {
+    box-sizing: border-box;
+    font-size: $rem-value;
+    font-family: $font-first;
+    background: $glb-color-body;
+}
+
+body {
+    font-size: $font-size;
+}
+
+* {
+    box-sizing: border-box;
+
+    &:before,
+    &:after {
+        box-sizing: border-box;
+        outline: none;
+    }
+}

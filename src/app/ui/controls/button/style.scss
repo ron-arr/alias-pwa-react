@@ -1,0 +1,19 @@
+.button {
+    padding: 15px;
+    background: #96def6;
+    border-radius: 8px;
+    text-transform: uppercase;
+    min-width: 80px;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 16px;
+    transition: background-color 0.2s;
+
+    &:hover {
+        background: darken(#96def6, 10%);
+    }
+
+    &:active {
+        background: lighten(#96def6, 10%);
+    }
+}
