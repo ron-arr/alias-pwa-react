@@ -1,0 +1,24 @@
+{
+    "compilerOptions": {
+        "jsx": "react",
+        "module": "commonjs",
+        "outDir": "./dist/",
+        "noImplicitAny": true,
+        "noImplicitReturns": true,
+        "diagnostics": true,
+        "noUnusedLocals": true,
+        "removeComments": true,
+        "target": "es5",
+        "sourceMap": true,
+        "baseUrl": ".",
+        "strict": true,
+        "paths": {
+            "components/*": ["./src/app/components/*"],
+            "models/*": ["./src/app/models/*"],
+            "ui/*": ["./src/app/ui/*"]
+        }
+    },
+    "include": ["src", "index.tsx"],
+    "exclude": ["node_modules"],
+    "files": ["declarations.d.ts"]
+}

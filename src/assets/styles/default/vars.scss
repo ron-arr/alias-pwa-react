@@ -1,0 +1,34 @@
+//site
+$rem-value: 10px;
+$font-size: 1.6rem;
+$font-first: 'Raleway', sans-serif;
+
+$breakpoints-xxs: 0;
+$breakpoints-xs: 600px;
+$breakpoints-sm: 700px;
+$breakpoints-md: 960px;
+$breakpoints-lg: 1280px;
+$breakpoints-xxl: 1600px;
+
+$site-max-width: $breakpoints-xxl;
+//grid
+$grid-columns: 12;
+$glb-gutter: 1.6rem;
+$glb-half-gutter: ($glb-gutter/ 2);
+//indents
+$screen-indents: 8rem;
+$screen-indents-mobile: 2rem;
+//animation
+$glb-anim-drt: 0.2s;
+//font size weight
+$fwh-thin: 100;
+$fwh-extra-lite: 200;
+$fwh-lite: 300;
+$fwh-regular: 400;
+$fwh-medium: 500;
+$fwh-semi-bold: 600;
+$fwh-bold: 700;
+$fwh-extra-bold: 800;
+$fwh-black: 900;
+
+$glb-color-body: #eff2f8;
