@@ -3,10 +3,17 @@ html {
     font-size: $rem-value;
     font-family: $font-first;
     background: $glb-color-body;
+    height: 100%;
 }
 
 body {
+    display: flex;
     font-size: $font-size;
+    height: 100%;
+}
+
+#content {
+    margin: 0 auto;
 }
 
 * {

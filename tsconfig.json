@@ -15,7 +15,9 @@
         "paths": {
             "components/*": ["./src/app/components/*"],
             "models/*": ["./src/app/models/*"],
-            "ui/*": ["./src/app/ui/*"]
+            "ui/*": ["./src/app/ui/*"],
+            "services/*": ["./src/services/*"],
+            "styles/*": ["./src/assets/styles/*"]
         }
     },
     "include": ["src", "index.tsx"],

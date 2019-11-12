@@ -1,22 +1,23 @@
+import './styles.scss';
 import * as React from 'react';
 import { useState } from 'react';
-import { User } from 'components/User';
 import { AlsInput, AlsButton } from 'ui/controls';
+import { GameSettings } from 'components/GameSettings';
+import { classNameBuilder } from 'services/className';
 
-interface IProps {
-    compiler: string;
-    framework: string;
-}
+interface IProps {}
+
+const cn = classNameBuilder('main');
 
 export const Main: React.FC<IProps> = (props: IProps) => {
     const [count, setCount] = useState(2);
 
     return (
-        <div>
-            <h1>
-                Hello from {props.compiler} and {props.framework}!!
-            </h1>
-            <User />
+        <div className={cn()}>
+            <h1>Alias</h1>
+            --
+            <GameSettings />
+            --
             <AlsInput
                 title={'Teams count'}
                 type="number"
