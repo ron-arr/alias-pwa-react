@@ -8,4 +8,5 @@ module.exports = {
     components: resolve('src', 'app', 'components'),
     models: resolve('src', 'app', 'models'),
     ui: resolve('src', 'app', 'ui'),
+    services: resolve('src', 'services'),
 };

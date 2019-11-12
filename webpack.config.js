@@ -19,14 +19,19 @@ const scssRule = {
         {
             loader: 'css-loader',
             options: {
-                sourceMap: true,
+                sourceMap: mode == 'development',
                 importLoaders: 2,
-                modules: { localIdentName: '[path][name]-[local]' },
+                modules: { localIdentName: 'c-als-[local]' },
                 localsConvention: 'camelCaseOnly',
             },
         },
         {
             loader: 'sass-loader',
+            options: {
+                sassOptions: {
+                    includePaths: [path.resolve(__dirname, './node_modules/compass-mixins/lib')],
+                },
+            },
         },
     ],
 };
@@ -48,12 +53,10 @@ module.exports = [
                     use: 'ts-loader',
                     exclude: /node_modules/,
                 },
-                { ...scssRule, exclude: path.resolve('src', 'assets', 'styles') },
-                { ...scssRule, include: path.resolve('src', 'assets', 'styles') },
+                // { ...scssRule },
+                { ...scssRule, exclude: [path.resolve('src', 'assets', 'styles')] },
+                { ...scssRule, include: [path.resolve('src', 'assets', 'styles')] },
             ],
-        },
-        resolve: {
-            extensions: ['.tsx', '.ts', '.js'],
         },
         resolve: {
             alias,
@@ -62,7 +65,7 @@ module.exports = [
         plugins: [
             new CleanWebpackPlugin(),
             new HtmlWebpackPlugin({ template: path.resolve('src', 'app', 'index.html') }),
-            new MiniCssExtractPlugin({ filename: '[name].css' }),
+            new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
         ],
     },
 ];
