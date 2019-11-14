@@ -1,6 +1,6 @@
 import './style.scss';
 import * as React from 'react';
-import { classNameBuilder } from 'services/className';
+import { classNameBuilder } from 'als-services/className';
 
 interface IProps {
     text: string;

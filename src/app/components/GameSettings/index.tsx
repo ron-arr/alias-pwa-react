@@ -1,7 +1,7 @@
 import './styles.scss';
 import * as React from 'react';
-import { classNameBuilder } from 'services/className';
-import { DropdownMenu } from 'ui/controls/DropdownMenu';
+import { classNameBuilder } from 'als-services/className';
+import { DropdownMenu } from 'als-ui/controls';
 
 const TEAM_BASE_TITLE = 'Количество команд';
 const LEVEL_BASE_TITLE = 'Уровень';

@@ -48,6 +48,7 @@ module.exports = [
             hot: true,
             host: 'localhost',
             port: 4201,
+            historyApiFallback: true,
         },
         mode,
         devtool,

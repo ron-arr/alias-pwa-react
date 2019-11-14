@@ -1,4 +1,4 @@
-import { ITeam } from 'models/team/interfaces';
+import { ITeam } from './interfaces';
 
 export class Team {
     name: string;
