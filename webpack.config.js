@@ -44,6 +44,11 @@ module.exports = [
             path: path.join(__dirname, 'dist', 'public'),
         },
         target: 'web',
+        devServer: {
+            hot: true,
+            host: 'localhost',
+            port: 4201,
+        },
         mode,
         devtool,
         module: {

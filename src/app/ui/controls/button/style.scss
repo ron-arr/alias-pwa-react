@@ -1,6 +1,9 @@
+@import 'compass/css3', 'styles/default/colors', 'styles/default/mixins';
+
 .button {
     padding: 15px;
-    background: #96def6;
+    background: $blue-300;
+    @include shadow($blue);
     border-radius: 8px;
     text-transform: uppercase;
     min-width: 80px;
@@ -10,10 +13,10 @@
     transition: background-color 0.2s;
 
     &:hover {
-        background: darken(#96def6, 10%);
+        background: darken($blue-300, 10%);
     }
 
     &:active {
-        background: lighten(#96def6, 10%);
+        background: lighten($blue-300, 10%);
     }
 }

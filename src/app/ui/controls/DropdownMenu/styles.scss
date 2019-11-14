@@ -3,23 +3,19 @@
 .dropdown-menu {
     $component: &;
 
-    font-size: 16px;
-    width: 350px;
-    margin: 50px auto;
-
     &__list {
         list-style: none;
         padding: 0;
-        margin: 0 0 20px 0;
+        margin: 4px 0;
     }
 
     &__toggle {
         text-decoration: none;
         display: block;
-        color: white;
-        background: $orange;
-        @include double-shadow($orange);
-        @include hover-style($orange);
+        color: $gray-900;
+        background: $blue-300;
+        @include double-shadow($blue);
+        @include hover-style($blue);
         @include text-shadow(0 -1px 0 rgba(0, 0, 0, 0.3));
         padding: 10px;
 
@@ -28,7 +24,7 @@
             display: block;
             content: '\25BC';
             font-size: 0.7em;
-            color: #fff;
+            color: $gray-900;
             top: 13px;
             right: 10px;
             @include transform(rotate(0deg));
