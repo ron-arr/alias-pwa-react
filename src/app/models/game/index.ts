@@ -1,4 +1,4 @@
-import { IGame } from 'models/game/interfaces';
+import { IGame } from './interfaces';
 
 export class Game {
     uid: string;

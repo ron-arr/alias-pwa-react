@@ -1,6 +1,6 @@
 import './styles.scss';
 import * as React from 'react';
-import { classNameBuilder } from 'services/className';
+import { classNameBuilder } from 'als-services/className';
 
 const cn = classNameBuilder('dropdown-menu');
 

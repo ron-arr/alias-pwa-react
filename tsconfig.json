@@ -10,13 +10,15 @@
         "removeComments": true,
         "target": "es5",
         "sourceMap": true,
-        "baseUrl": ".",
         "strict": true,
+        "baseUrl": ".",
         "paths": {
-            "components/*": ["./src/app/components/*"],
-            "models/*": ["./src/app/models/*"],
-            "ui/*": ["./src/app/ui/*"],
-            "services/*": ["./src/services/*"],
+            "als-pages/*": ["./src/app/pages/*"],
+            "als-components/*": ["./src/app/components/*"],
+            "als-models/*": ["./src/app/models/*"],
+            "als-ui/*": ["./src/app/ui/*"],
+            "als-routes/*": ["./src/app/routes/*"],
+            "als-services/*": ["./src/services/*"],
             "styles/*": ["./src/assets/styles/*"]
         }
     },
