@@ -21,6 +21,5 @@
         }
     },
     "include": ["src", "index.tsx"],
-    "exclude": ["node_modules"],
-    "files": ["declarations.d.ts"]
+    "exclude": ["node_modules"]
 }
