@@ -2,6 +2,8 @@
 
 .dropdown-menu {
     $component: &;
+    font-size: 1.9rem;
+    line-height: 40px;
 
     &__list {
         list-style: none;
@@ -10,6 +12,7 @@
     }
 
     &__toggle {
+        border-radius: 4px;
         text-decoration: none;
         display: block;
         color: $primary-text;
@@ -52,7 +55,7 @@
 
     &__item-link {
         display: block;
-        color: darken($secondary-light, 50%);
+        color: darken($secondary-text, 50%);
         background: $secondary-light;
         @include double-shadow($secondary-light);
         @include hover-style($secondary-light);
