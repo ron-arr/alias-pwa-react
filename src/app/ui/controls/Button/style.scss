@@ -2,8 +2,6 @@
 
 .button {
     padding: 15px;
-    background: $blue-300;
-    @include shadow($blue);
     border-radius: 8px;
     text-transform: uppercase;
     min-width: 80px;
@@ -13,10 +11,22 @@
     transition: background-color 0.2s;
 
     &:hover {
-        background: darken($blue-300, 10%);
+        background: darken($primary-light, 10%);
     }
 
     &:active {
-        background: lighten($blue-300, 10%);
+        background: lighten($primary-light, 10%);
+    }
+
+    &--primary {
+        background: $primary;
+        @include shadow($primary-dark);
+        color: $primary-text;
+    }
+
+    &--secondary {
+        background-color: $secondary;
+        @include shadow($secondary-dark);
+        color: $secondary-text;
     }
 }

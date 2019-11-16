@@ -20,7 +20,7 @@ export const MainPage: React.FC<IProps> = (props: IProps) => {
             <div className={cn('title')}>Alias</div>
             <GameSettings />
             <div>
-                <Button text={'Начать'} onAction={handleStart} />
+                <Button text={'Продолжить'} type="secondary" onAction={handleStart} />
             </div>
         </div>
     );
