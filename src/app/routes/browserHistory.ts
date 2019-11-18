@@ -1,5 +1,7 @@
-import { createHashHistory } from 'history';
+import { createBrowserHistory } from 'history';
 
-const browserHistory = createHashHistory();
+const browserHistory = createBrowserHistory({
+    basename: '/',
+});
 
 export { browserHistory };

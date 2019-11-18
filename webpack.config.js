@@ -42,6 +42,7 @@ module.exports = [
         output: {
             filename: '[name].js',
             path: path.join(__dirname, 'dist', 'public'),
+            publicPath: '/',
         },
         target: 'web',
         devServer: {
