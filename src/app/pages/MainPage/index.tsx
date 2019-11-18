@@ -14,7 +14,6 @@ const cn = classNameBuilder('main');
 const handleStart = (teamsCount: number) => {
     const history = useHistory();
     return () => {
-        console.log('teamsCount', teamsCount);
         history.push(`/select-teams/${getRandomString()}`, {
             teamsCount,
         });
