@@ -19,6 +19,7 @@
             "als-ui/*": ["./src/app/ui/*"],
             "als-routes/*": ["./src/app/routes/*"],
             "als-services/*": ["./src/services/*"],
+            "als-icons/*": ["./src/icons/*"],
             "styles/*": ["./src/assets/styles/*"]
         }
     },

@@ -8,8 +8,7 @@ interface IRouterProps {
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
-
-const cn = classNameBuilder('main');
+const cn = classNameBuilder('game');
 
 export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
     console.log('match', match);

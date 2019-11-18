@@ -8,7 +8,11 @@ const LEVEL_BASE_TITLE = 'Уровень';
 const ROUND_DUR_BASE_TITLE = 'Время раунда';
 const cn = classNameBuilder('game-settings');
 
-export const GameSettings: React.FC = () => {
+interface IProps {
+    onChangeTeamsCnt: (value: number) => void;
+}
+
+export const GameSettings: React.FC<IProps> = ({ onChangeTeamsCnt }) => {
     const [teamsCnt, setTeamsCount] = React.useState(2);
     const [teamTitle, setTeamTitle] = React.useState(`${TEAM_BASE_TITLE}: ${teamsCnt}`);
     const [level, setLevel] = React.useState('Простой');
@@ -27,6 +31,7 @@ export const GameSettings: React.FC = () => {
                 closeOnSelect={true}
                 onSelect={index => {
                     setTeamsCount(teamsCount[index]);
+                    onChangeTeamsCnt(teamsCount[index]);
                     setTeamTitle(`${TEAM_BASE_TITLE}: ${teamsCount[index]}`);
                 }}
             />
