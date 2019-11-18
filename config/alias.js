@@ -11,4 +11,5 @@ module.exports = {
     'als-ui': resolve('src', 'app', 'ui'),
     'als-routes': resolve('src', 'app', 'routes'),
     'als-services': resolve('src', 'services'),
+    'als-icons': resolve('src', 'icons'),
 };

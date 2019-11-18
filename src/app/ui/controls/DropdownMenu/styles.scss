@@ -16,7 +16,7 @@
         text-decoration: none;
         display: block;
         color: $primary-text;
-        background: $primary-light;
+        background: $primary;
         @include double-shadow($primary-dark);
         @include hover-style($primary-dark);
         @include text-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
@@ -44,9 +44,7 @@
         overflow: hidden;
         @include ul-nostyle;
         @include transform(scaleY(0));
-        @include transform-origin(50%, 0%);
         @include transition(max-height 0.6s ease-out);
-        @include animation(hideAnimation 0.4s ease-out);
     }
 
     &__item {
@@ -57,8 +55,8 @@
         display: block;
         color: darken($secondary-text, 50%);
         background: $secondary-light;
-        @include double-shadow($secondary-light);
-        @include hover-style($secondary-light);
+        @include double-shadow($secondary-dark);
+        @include hover-style($secondary-dark);
         @include text-shadow(0 -1px 0 rgba(255, 255, 255, 0.3));
         padding: 10px 10px;
     }
@@ -76,7 +74,6 @@
             max-height: 9999px;
             display: block;
             @include transform(scaleY(1));
-            @include animation(showAnimation 0.5s ease-in-out);
             @include transition(max-height 2s ease-in-out);
         }
 
@@ -86,44 +83,5 @@
                 @include transition(transform 0.6s);
             }
         }
-    }
-}
-
-@include keyframes(showAnimation) {
-    0% {
-        @include transform(scaleY(0.1));
-    }
-    40% {
-        @include transform(scaleY(1.04));
-    }
-    60% {
-        @include transform(scaleY(0.98));
-    }
-    80% {
-        @include transform(scaleY(1.04));
-    }
-    100% {
-        @include transform(scaleY(0.98));
-    }
-    80% {
-        @include transform(scaleY(1.02));
-    }
-    100% {
-        @include transform(scaleY(1));
-    }
-}
-
-@include keyframes(hideAnimation) {
-    0% {
-        @include transform(scaleY(1));
-    }
-    60% {
-        @include transform(scaleY(0.98));
-    }
-    80% {
-        @include transform(scaleY(1.02));
-    }
-    100% {
-        @include transform(scaleY(0));
     }
 }
