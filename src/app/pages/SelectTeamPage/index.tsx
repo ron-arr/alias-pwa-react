@@ -3,6 +3,7 @@ import * as React from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps } from 'react-router-dom';
 import { teamIcons } from 'als-models/team/icons';
+import { Header } from 'als-ui';
 
 interface IRouterProps {
     gameUid: string;
@@ -17,24 +18,21 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
         const { teamsCount } = history.location.state as { teamsCount: number };
         const [selectedTeams, setTeams] = React.useState<number[]>([]);
         const handleChoose = (iconIndex: number) => {
-            if (selectedTeams.length + 1 < teamsCount) {
-                return () => {
+            return () => {
+                if (selectedTeams.length + 1 < teamsCount) {
                     setTeams([...selectedTeams, iconIndex]);
-                };
-            } else {
-                return () => {
-                    history.replace(`/results/${match.params.gameUid}`, {
+                } else {
+                    selectedTeams.push(iconIndex);
+                    history.push(`/results/${match.params.gameUid}`, {
                         teams: selectedTeams,
                     });
-                };
-            }
+                }
+            };
         };
 
         return (
             <div className={cn()}>
-                <div className={cn('header')}>
-                    <h1 className={cn('title')}>{`Выберите ${selectedTeams.length + 1}-ю команду`}</h1>
-                </div>
+                <Header title={`Выберите ${selectedTeams.length + 1}-ю команду`} />
                 <div className={cn('teams')}>
                     {teamIcons.map((TeamIcon, index) => {
                         if (!~selectedTeams.indexOf(index)) {
