@@ -1,6 +1,7 @@
 @import 'compass/css3', 'styles/default/colors', 'styles/default/mixins';
 
 .button {
+    display: inline;
     padding: 15px;
     border-radius: 4px;
     text-transform: uppercase;

@@ -3,7 +3,6 @@ import * as React from 'react';
 import { Button } from 'als-ui/controls';
 import { GameSettings } from 'als-components/GameSettings';
 import { classNameBuilder } from 'als-services/className';
-// import { browserHistory } from 'als-routes/browserHistory';
 import { getRandomString } from 'als-services/utils';
 import { useHistory } from 'react-router-dom';
 
