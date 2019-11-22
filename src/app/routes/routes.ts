@@ -3,6 +3,7 @@ import { MainPage } from 'als-pages/MainPage';
 import { GamePage } from 'als-pages/GamePage';
 import { SelectTeamPage } from 'als-pages/SelectTeamPage';
 import { ResultsPage } from 'als-pages/ResultsPage';
+import { WordsPage } from 'als-pages/WordsPage';
 
 interface IRoute {
     path: string;
@@ -19,12 +20,16 @@ const routes: IRoute[] = [
         component: SelectTeamPage,
     },
     {
+        path: '/results/:gameUid',
+        component: ResultsPage,
+    },
+    {
         path: '/game/:gameUid',
         component: GamePage,
     },
     {
-        path: '/results/:gameUid',
-        component: ResultsPage,
+        path: '/words',
+        component: WordsPage,
     },
 ];
 

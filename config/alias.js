@@ -12,4 +12,5 @@ module.exports = {
     'als-routes': resolve('src', 'app', 'routes'),
     'als-services': resolve('src', 'services'),
     'als-icons': resolve('src', 'icons'),
+    'als-db': resolve('src', 'db'),
 };
