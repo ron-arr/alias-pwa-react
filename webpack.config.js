@@ -63,6 +63,7 @@ module.exports = [
                 // { ...scssRule },
                 { ...scssRule, exclude: [path.resolve('src', 'assets', 'styles')] },
                 { ...scssRule, include: [path.resolve('src', 'assets', 'styles')] },
+                { test: /\.txt$/, use: 'raw-loader' },
             ],
         },
         resolve: {

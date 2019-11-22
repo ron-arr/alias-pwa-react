@@ -1,0 +1,28 @@
+@import 'styles/default/colors';
+
+.words {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 40px auto;
+    text-align: center;
+
+    &__word {
+        font-size: 34px;
+        font-weight: 600;
+        margin: 20px 0;
+        width: 100%;
+        word-break: break-all;
+    }
+
+    &__btn {
+        margin: 10px 0;
+    }
+
+    &__help {
+        color: $secondary-text;
+        font-style: italic;
+        margin-top: 30px;
+    }
+}

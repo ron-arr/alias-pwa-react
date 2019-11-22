@@ -1,7 +1,7 @@
 import './styles.scss';
 import * as React from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { teamIcons } from 'als-models/team/icons';
 import { Header } from 'als-ui';
 
@@ -50,8 +50,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                 </div>
             </div>
         );
-    } else {
-        history.replace('/');
-        return null;
     }
+
+    return <Redirect to="/" />;
 };

@@ -16,6 +16,8 @@
 /dist
 
 # misc
+_local/
+*.txt
 .DS_Store
 .env
 .env.local
