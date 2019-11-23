@@ -40,8 +40,6 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
             });
     }
 
-    console.log('game', game);
-
     if (game) {
         const handleChoose = (iconIndex: number) => {
             return () => {
