@@ -2,12 +2,12 @@ import './styles.scss';
 import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { Header } from 'als-ui';
 import { Button } from 'als-ui/controls';
 import { teamIcons } from 'als-ui/icons';
 import { Game } from 'als-models';
 import { Loader } from 'als-components/Loader';
 import { gameRepo } from 'als-db';
+import { Header } from 'als-components/Header';
 
 interface IRouterProps {
     gameUid: string;
@@ -26,19 +26,21 @@ export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
         game: null,
     });
     const { game, loaded } = state;
-    const gameUid = match.params.gameUid;
     if (!loaded) {
-        gameRepo.get(gameUid).then(game => {
-            setState({ ...state, game, loaded: true });
-        });
+        gameRepo
+            .get(match.params.gameUid)
+            .then(game => {
+                setState({ ...state, game, loaded: true });
+            })
+            .catch(() => {
+                setState({ ...state, loaded: true });
+            });
     }
-    const handleContinue = () => {
-        history.push(`/game/${match.params.gameUid}`, {
-            teams: history.location.state.teams,
-        });
-    };
 
     if (game) {
+        const handleContinue = () => {
+            history.push(`/game/${game.uid}`);
+        };
         return (
             <div className={cn()}>
                 <Header title={'Команды'} />
@@ -49,7 +51,7 @@ export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                         <div className={cn('col', { th: true })}>Очки</div>
                     </div>
                     {teamIcons.map((TeamIcon, index) =>
-                        ~game.teams.indexOf(index) ? (
+                        ~game.teamIds.indexOf(index) ? (
                             <div key={index} className={cn('row')}>
                                 <div className={cn('col')}>
                                     <TeamIcon.Icon width={32} height={32} />

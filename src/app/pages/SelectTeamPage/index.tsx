@@ -2,11 +2,11 @@ import './styles.scss';
 import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { Header } from 'als-ui';
 import { teamIcons } from 'als-ui/icons';
 import { gameRepo } from 'als-db';
 import { Loader } from 'als-components/Loader';
 import { Game } from 'als-models';
+import { Header } from 'als-components/Header';
 
 interface IRouterProps {
     gameUid: string;
@@ -16,7 +16,7 @@ interface IProps extends RouteComponentProps<IRouterProps> {}
 interface IState {
     loaded: boolean;
     game: null | Game;
-    teams: number[];
+    teamIds: number[];
 }
 
 const cn = classNameBuilder('select-teams');
@@ -25,14 +25,19 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
     const [state, setState] = useState<IState>({
         loaded: false,
         game: null,
-        teams: [],
+        teamIds: [],
     });
-    const { game, loaded, teams } = state;
+    const { game, loaded, teamIds } = state;
     const gameUid = match.params.gameUid;
     if (!loaded) {
-        gameRepo.get(gameUid).then(game => {
-            setState({ ...state, game, loaded: true });
-        });
+        gameRepo
+            .get(gameUid)
+            .then(game => {
+                setState({ ...state, game, loaded: true });
+            })
+            .catch(() => {
+                setState({ ...state, loaded: true });
+            });
     }
 
     console.log('game', game);
@@ -40,12 +45,12 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
     if (game) {
         const handleChoose = (iconIndex: number) => {
             return () => {
-                if (teams.length + 1 < game.teamsCount) {
-                    setState({ ...state, teams: [...teams, iconIndex] });
+                if (teamIds.length + 1 < game.teamsCount) {
+                    setState({ ...state, teamIds: [...teamIds, iconIndex] });
                 } else {
-                    teams.push(iconIndex);
-                    game.teams = teams;
-                    game.points = teams.map(team => 0);
+                    teamIds.push(iconIndex);
+                    game.teamIds = teamIds;
+                    game.points = teamIds.map(team => 0);
                     gameRepo.save(game).then(() => {
                         history.push(`/results/${game.uid}`);
                     });
@@ -55,10 +60,10 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
 
         return (
             <div className={cn()}>
-                <Header title={`Выберите ${teams.length + 1}-ю команду`} />
+                <Header title={`Выберите ${teamIds.length + 1}-ю команду`} />
                 <div className={cn('teams')}>
                     {teamIcons.map((TeamIcon, index) => {
-                        if (!~teams.indexOf(index)) {
+                        if (!~teamIds.indexOf(index)) {
                             return (
                                 <div key={index} className={cn('team-wrap')}>
                                     <button className={cn('team')} onClick={handleChoose(index)}>
