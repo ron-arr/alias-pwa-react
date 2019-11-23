@@ -1,32 +1,39 @@
 import './styles.scss';
-import * as React from 'react';
+import React from 'react';
 import { Button } from 'als-ui/controls';
-import { GameSettings } from 'als-components/GameSettings';
+import { Settings } from 'als-pages/MainPage/Settings';
 import { classNameBuilder } from 'als-services/className';
-import { getRandomString } from 'als-services/utils';
 import { useHistory } from 'react-router-dom';
+import { GameSettings } from 'als-models';
+import { gameRepo } from 'als-db';
 
 interface IProps {}
 
 const cn = classNameBuilder('main');
 
-const handleStart = (teamsCount: number) => {
+const handleStart = (settings: GameSettings) => {
     const history = useHistory();
     return () => {
-        history.push(`/select-teams/${getRandomString()}`, {
-            teamsCount,
+        const game = settings.createGame();
+        gameRepo.save(game).then(() => {
+            history.push(`/select-teams/${game.uid}`);
         });
     };
 };
 
 export const MainPage: React.FC<IProps> = (props: IProps) => {
-    const [teamsCount, setTeamsCount] = React.useState(2);
+    let settings = new GameSettings();
     return (
         <div className={cn()}>
             <div className={cn('title')}>Alias</div>
-            <GameSettings onChangeTeamsCnt={setTeamsCount} />
+            <Settings
+                settings={settings}
+                onChangeSettings={(fieldName, value) => {
+                    settings[fieldName] = value;
+                }}
+            />
             <div>
-                <Button text={'Продолжить'} type="secondary" onAction={handleStart(teamsCount)} />
+                <Button text={'Продолжить'} type="secondary" onAction={handleStart(settings)} />
             </div>
         </div>
     );

@@ -8,6 +8,7 @@ module.exports = {
     'als-components': resolve('src', 'app', 'components'),
     'als-pages': resolve('src', 'app', 'pages'),
     'als-models': resolve('src', 'app', 'models'),
+    'als-data-types': resolve('src', 'app', 'data-types'),
     'als-ui': resolve('src', 'app', 'ui'),
     'als-routes': resolve('src', 'app', 'routes'),
     'als-services': resolve('src', 'services'),

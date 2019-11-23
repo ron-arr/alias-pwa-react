@@ -17,6 +17,7 @@
             "als-pages/*": ["./src/app/pages/*"],
             "als-components/*": ["./src/app/components/*"],
             "als-models": ["./src/app/models/index.ts"],
+            "als-data-types/*": ["./src/app/data-types/*"],
             "als-ui": ["./src/app/ui/index.ts"],
             "als-ui/*": ["./src/app/ui/*"],
             "als-routes/*": ["./src/app/routes/*"],
