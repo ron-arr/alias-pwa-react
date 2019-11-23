@@ -18,9 +18,9 @@ interface IState {
     game: null | Game;
 }
 
-const cn = classNameBuilder('results');
+const cn = classNameBuilder('ready');
 
-export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
+export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
     const [state, setState] = useState<IState>({
         loaded: false,
         game: null,
@@ -30,6 +30,7 @@ export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
         gameRepo
             .get(match.params.gameUid)
             .then(game => {
+                console.log('game', game)
                 setState({ ...state, game, loaded: true });
             })
             .catch(() => {

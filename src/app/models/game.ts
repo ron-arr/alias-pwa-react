@@ -55,6 +55,7 @@ export class Game {
 
     get currentTeam(): Team | null {
         const team = this.teams.find(team => team.lastRound === this.round - 1);
+        console.log('team', team);
         return team || null;
     }
 }
