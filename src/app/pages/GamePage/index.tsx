@@ -7,6 +7,9 @@ import { gameRepo } from 'als-db';
 import { Loader } from 'als-components/Loader';
 import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
+import { Button } from 'als-ui/controls';
+
+type TStatus = 'TEAM' | 'GAME';
 
 interface IRouterProps {
     gameUid: string;
@@ -14,6 +17,7 @@ interface IRouterProps {
 interface IState {
     loaded: boolean;
     game: null | Game;
+    status: TStatus;
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
@@ -23,8 +27,9 @@ export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
     const [state, setState] = useState<IState>({
         loaded: false,
         game: null,
+        status: 'TEAM',
     });
-    const { game, loaded } = state;
+    const { game, loaded, status } = state;
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
@@ -36,10 +41,17 @@ export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
             });
     }
     if (game && game.currentTeam) {
+        const handleStart = () => () => {};
+
         return (
             <div className={cn()}>
                 <Header title={`${game.roundTitle} раунд`} />
-                {game.currentTeam && <TeamRound className={cn('team')} team={game.currentTeam} />}
+                {status === 'TEAM' && (
+                    <>
+                        <TeamRound className={cn('team')} team={game.currentTeam} />
+                        <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
+                    </>
+                )}
             </div>
         );
     } else if (!loaded) {

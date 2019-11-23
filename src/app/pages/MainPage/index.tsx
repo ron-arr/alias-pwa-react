@@ -32,9 +32,7 @@ export const MainPage: React.FC<IProps> = (props: IProps) => {
                     settings[fieldName] = value;
                 }}
             />
-            <div>
-                <Button text={'Продолжить'} type="secondary" onAction={handleStart(settings)} />
-            </div>
+            <Button className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleStart(settings)} />
         </div>
     );
 };

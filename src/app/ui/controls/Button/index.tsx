@@ -6,6 +6,7 @@ type TButtonType = 'primary' | 'secondary';
 
 interface IProps {
     text: string;
+    className?: string;
     type?: TButtonType;
     disabled?: boolean;
     onAction: (event: React.MouseEvent<HTMLButtonElement>) => void;
@@ -13,11 +14,11 @@ interface IProps {
 
 const cn = classNameBuilder('button');
 
-export const Button: React.FC<IProps> = ({ text, type, disabled, onAction }: IProps) => {
+export const Button: React.FC<IProps> = ({ text, className, type, disabled, onAction }: IProps) => {
     type = type || 'primary';
 
     return (
-        <button className={cn('', { [type]: true })} onClick={onAction} disabled={disabled}>
+        <button className={cn('', { [type]: true }, [className])} onClick={onAction} disabled={disabled}>
             <span>{text}</span>
         </button>
     );

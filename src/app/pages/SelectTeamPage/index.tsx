@@ -52,7 +52,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                     game.teamIds = teamIds;
                     game.points = teamIds.map(team => 0);
                     gameRepo.save(game).then(() => {
-                        history.push(`/results/${game.uid}`);
+                        history.push(`/ready/${game.uid}`);
                     });
                 }
             };

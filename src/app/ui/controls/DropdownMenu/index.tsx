@@ -19,9 +19,8 @@ interface IProps<T> {
 
 export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, items, closeOnSelect, onSelect }: IProps<T>) => {
     const [open, setOpen] = React.useState(false);
-    const select = (index: number) => {
-        return (event: React.MouseEvent<HTMLAnchorElement>) => {
-            event.preventDefault();
+    const handleSelect = (index: number) => {
+        return (event: React.MouseEvent<HTMLButtonElement>) => {
             onSelect(items[index]);
             if (closeOnSelect) {
                 setOpen(false);
@@ -36,15 +35,15 @@ export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, 
             <ul className={cn('list')}>
                 <li className={cn('dropdown')}>
                     <input className={cn('check')} type="checkbox" checked={open} onChange={handleCheckChange} />
-                    <a className={cn('toggle')} href="#" data-toggle="dropdown">
+                    <button className={cn('toggle')} data-toggle="dropdown">
                         {title}
-                    </a>
+                    </button>
                     <ul className={cn('items')}>
                         {items.map((item: TOptionValue | TOptionDropdown, index: number) => (
                             <li key={index} className={cn('item')}>
-                                <a className={cn('item-link')} href="#" onClick={select(index)}>
+                                <button className={cn('item-btn')} onClick={handleSelect(index)}>
                                     {typeof item === 'object' ? item.title : item}
-                                </a>
+                                </button>
                             </li>
                         ))}
                     </ul>
