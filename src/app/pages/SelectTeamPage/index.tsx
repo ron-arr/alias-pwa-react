@@ -1,30 +1,53 @@
 import './styles.scss';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { teamIcons } from 'als-models/team/icons';
 import { Header } from 'als-ui';
+import { teamIcons } from 'als-ui/icons';
+import { gameRepo } from 'als-db';
+import { Loader } from 'als-components/Loader';
+import { Game } from 'als-models';
 
 interface IRouterProps {
     gameUid: string;
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
+interface IState {
+    loaded: boolean;
+    game: null | Game;
+    teams: number[];
+}
 
 const cn = classNameBuilder('select-teams');
 
 export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => {
-    if (history.location.state) {
-        const { teamsCount } = history.location.state as { teamsCount: number };
-        const [selectedTeams, setTeams] = React.useState<number[]>([]);
+    const [state, setState] = useState<IState>({
+        loaded: false,
+        game: null,
+        teams: [],
+    });
+    const { game, loaded, teams } = state;
+    const gameUid = match.params.gameUid;
+    if (!loaded) {
+        gameRepo.get(gameUid).then(game => {
+            setState({ ...state, game, loaded: true });
+        });
+    }
+
+    console.log('game', game);
+
+    if (game) {
         const handleChoose = (iconIndex: number) => {
             return () => {
-                if (selectedTeams.length + 1 < teamsCount) {
-                    setTeams([...selectedTeams, iconIndex]);
+                if (teams.length + 1 < game.teamsCount) {
+                    setState({ ...state, teams: [...teams, iconIndex] });
                 } else {
-                    selectedTeams.push(iconIndex);
-                    history.push(`/results/${match.params.gameUid}`, {
-                        teams: selectedTeams,
+                    teams.push(iconIndex);
+                    game.teams = teams;
+                    game.points = teams.map(team => 0);
+                    gameRepo.save(game).then(() => {
+                        history.push(`/results/${game.uid}`);
                     });
                 }
             };
@@ -32,10 +55,10 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
 
         return (
             <div className={cn()}>
-                <Header title={`Выберите ${selectedTeams.length + 1}-ю команду`} />
+                <Header title={`Выберите ${teams.length + 1}-ю команду`} />
                 <div className={cn('teams')}>
                     {teamIcons.map((TeamIcon, index) => {
-                        if (!~selectedTeams.indexOf(index)) {
+                        if (!~teams.indexOf(index)) {
                             return (
                                 <div key={index} className={cn('team-wrap')}>
                                     <button className={cn('team')} onClick={handleChoose(index)}>
@@ -50,6 +73,8 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                 </div>
             </div>
         );
+    } else if (!loaded) {
+        return <Loader />;
     }
 
     return <Redirect to="/" />;

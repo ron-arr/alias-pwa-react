@@ -1,27 +1,44 @@
 import './styles.scss';
-import * as React from 'react';
+import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { teamIcons } from 'als-models/team/icons';
 import { Header } from 'als-ui';
 import { Button } from 'als-ui/controls';
+import { teamIcons } from 'als-ui/icons';
+import { Game } from 'als-models';
+import { Loader } from 'als-components/Loader';
+import { gameRepo } from 'als-db';
 
 interface IRouterProps {
     gameUid: string;
 }
 interface IProps extends RouteComponentProps<IRouterProps> {}
+interface IState {
+    loaded: boolean;
+    game: null | Game;
+}
 
 const cn = classNameBuilder('results');
 
 export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    const [state, setState] = useState<IState>({
+        loaded: false,
+        game: null,
+    });
+    const { game, loaded } = state;
+    const gameUid = match.params.gameUid;
+    if (!loaded) {
+        gameRepo.get(gameUid).then(game => {
+            setState({ ...state, game, loaded: true });
+        });
+    }
     const handleContinue = () => {
         history.push(`/game/${match.params.gameUid}`, {
             teams: history.location.state.teams,
         });
     };
 
-    if (history.location.state) {
-        const teams: number[] = history.location.state.teams;
+    if (game) {
         return (
             <div className={cn()}>
                 <Header title={'Команды'} />
@@ -32,7 +49,7 @@ export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                         <div className={cn('col', { th: true })}>Очки</div>
                     </div>
                     {teamIcons.map((TeamIcon, index) =>
-                        ~teams.indexOf(index) ? (
+                        ~game.teams.indexOf(index) ? (
                             <div key={index} className={cn('row')}>
                                 <div className={cn('col')}>
                                     <TeamIcon.Icon width={32} height={32} />
@@ -48,6 +65,8 @@ export const ResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                 </div>
             </div>
         );
+    } else if (!loaded) {
+        return <Loader />;
     }
     return <Redirect to="/" />;
 };

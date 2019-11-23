@@ -4,19 +4,25 @@ import { classNameBuilder } from 'als-services/className';
 
 const cn = classNameBuilder('dropdown-menu');
 
-interface IProps {
+type TOptionValue = number | string;
+export type TOptionDropdown<T = TOptionValue> = {
     title: string;
-    items: (string | number)[];
+    value: T;
+};
+
+interface IProps<T> {
+    title: string;
+    items: T[];
     closeOnSelect?: boolean;
-    onSelect: (index: number) => void;
+    onSelect: (value: T) => void;
 }
 
-export const DropdownMenu: React.FC<IProps> = ({ title, items, closeOnSelect, onSelect }) => {
+export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, items, closeOnSelect, onSelect }: IProps<T>) => {
     const [open, setOpen] = React.useState(false);
     const select = (index: number) => {
         return (event: React.MouseEvent<HTMLAnchorElement>) => {
             event.preventDefault();
-            onSelect(index);
+            onSelect(items[index]);
             if (closeOnSelect) {
                 setOpen(false);
             }
@@ -34,10 +40,10 @@ export const DropdownMenu: React.FC<IProps> = ({ title, items, closeOnSelect, on
                         {title}
                     </a>
                     <ul className={cn('items')}>
-                        {items.map((item, index) => (
+                        {items.map((item: TOptionValue | TOptionDropdown, index: number) => (
                             <li key={index} className={cn('item')}>
                                 <a className={cn('item-link')} href="#" onClick={select(index)}>
-                                    {item}
+                                    {typeof item === 'object' ? item.title : item}
                                 </a>
                             </li>
                         ))}
