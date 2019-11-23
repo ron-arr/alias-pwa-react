@@ -1,4 +1,4 @@
-import { AngelIcon, HipsterIcon, CoffeeManIcon, LgbtIcon } from 'als-icons/teams';
+import { AngelIcon, HipsterIcon, CoffeeManIcon, LgbtIcon } from 'als-icons/teamsIcons';
 
 export type TTeamIcon = { title: string; Icon: Function };
 

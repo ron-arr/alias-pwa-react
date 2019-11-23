@@ -20,7 +20,7 @@ export class GameSettings {
             level: this.level,
             roundTime: this.roundTime,
             teamsCount: this.teamsCount,
-            teams: [],
+            teamIds: [],
             points: [],
         });
     }

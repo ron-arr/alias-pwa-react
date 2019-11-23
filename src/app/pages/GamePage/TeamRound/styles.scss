@@ -1,0 +1,9 @@
+@import 'styles/default/colors';
+
+.team-round {
+    text-align: center;
+    &__name {
+        font-size: 26px;
+        color: $secondary-text;
+    }
+}
