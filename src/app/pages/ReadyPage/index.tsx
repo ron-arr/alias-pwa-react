@@ -30,7 +30,6 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
         gameRepo
             .get(match.params.gameUid)
             .then(game => {
-                console.log('game', game)
                 setState({ ...state, game, loaded: true });
             })
             .catch(() => {

@@ -23,7 +23,7 @@ export class Game {
         this.points = data.points;
         this.round = data.round || 1;
 
-        if (data.teams) {
+        if (data.teams && data.teams.length > 1) {
             this.teams = data.teams.map(teamData => new Team(teamData));
         } else {
             this.teams = this.teamIds.map(
@@ -55,7 +55,6 @@ export class Game {
 
     get currentTeam(): Team | null {
         const team = this.teams.find(team => team.lastRound === this.round - 1);
-        console.log('team', team);
         return team || null;
     }
 }
