@@ -6,7 +6,7 @@
         "noImplicitAny": true,
         "noImplicitReturns": true,
         "diagnostics": true,
-        "noUnusedLocals": true,
+        "noUnusedLocals": false,
         "removeComments": true,
         "target": "es5",
         "sourceMap": true,
