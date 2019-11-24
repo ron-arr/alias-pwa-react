@@ -1,11 +1,18 @@
 @import 'compass/css3', 'styles/default/colors', 'styles/default/mixins';
 .cards {
+    $component: &;
+    touch-action: none;
     display: table;
     position: absolute;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    overflow: hidden;
+
+    &--drag {
+        background: radial-gradient(ellipse at center, transparent 60%, #aaa);
+    }
 
     &__wrapper {
         display: table-cell;
@@ -13,18 +20,20 @@
     }
 
     &__accept {
+        z-index: 0;
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         height: 40%;
 
-        &:hover {
-            background-color: rgba(green, 0.1);
+        #{$component}--drag-up & {
+            background: linear-gradient(to top, transparent 65%, rgba(rgba(133, 240, 118, 0.938), 0.5));
         }
     }
 
     &__skip {
+        z-index: 0;
         position: fixed;
         bottom: 0;
         left: 0;
@@ -32,31 +41,47 @@
         height: 40%;
         display: flex;
         align-items: flex-end;
+        background: transparent;
 
-        &:hover {
-            background-color: rgba(red, 0.1);
+        #{$component}--drag-down & {
+            background: linear-gradient(to bottom, transparent 65%, rgba(rgb(173, 66, 120), 0.2));
         }
     }
 
-    &__result-title {
+    &__btn-title {
+        z-index: 2;
+        letter-spacing: 4px;
+        visibility: visible;
         color: $secondary-dark;
         width: 100%;
         text-align: center;
         vertical-align: top;
         padding: 40px;
+        text-transform: uppercase;
+        transition: visibility 0s, opacity 0.5s linear;
 
         &--accept {
             color: green;
-            @include double-shadow(lightgreen);
+            // @include double-shadow(lightgreen);
         }
 
         &--skip {
             color: red;
-            @include double-shadow(red);
+            // @include double-shadow(red);
+        }
+
+        #{$component}--drag & {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.25s, opacity 0.25s linear;
         }
     }
 
     &__word {
+        // size, position, fancies
+        z-index: 10;
+        cursor: pointer;
+        user-select: none;
         margin-left: auto;
         margin-right: auto;
         display: flex;
@@ -74,6 +99,11 @@
         padding: 10px;
         @include shadow($secondary-dark);
 
+        // motion
+        pointer-events: auto;
+        transform-origin: 50% 50% 0px;
+
+        // text
         padding: 10px;
         font-size: 26px;
         color: $secondary-text;
