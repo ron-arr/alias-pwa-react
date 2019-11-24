@@ -8,6 +8,7 @@ import { Loader } from 'als-components/Loader';
 import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
 import { Button } from 'als-ui/controls';
+import { Cards } from './Cards';
 
 type TStatus = 'TEAM' | 'GAME';
 
@@ -27,7 +28,7 @@ export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
     const [state, setState] = useState<IState>({
         loaded: false,
         game: null,
-        status: 'TEAM',
+        status: 'GAME',
     });
     const { game, loaded, status } = state;
     if (!loaded) {
@@ -45,13 +46,14 @@ export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
 
         return (
             <div className={cn()}>
-                <Header title={`${game.roundTitle} раунд`} />
                 {status === 'TEAM' && (
                     <>
+                        <Header title={`${game.roundTitle} раунд`} />
                         <TeamRound className={cn('team')} team={game.currentTeam} />
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>
                 )}
+                {status === 'GAME' && <Cards team={game.currentTeam} />}
             </div>
         );
     } else if (!loaded) {

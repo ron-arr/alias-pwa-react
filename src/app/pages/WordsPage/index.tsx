@@ -19,6 +19,14 @@ const lastNumDoc = settingsRef.doc('lastNum');
 
 let lastNum: number = 0;
 
+// @ts-ignore
+function count_words() {
+    wordsEasyRef.get().then(snap => console.log('wordsEasyRef', snap.size));
+    wordsNormRef.get().then(snap => console.log('wordsNormRef', snap.size));
+    wordsHardRef.get().then(snap => console.log('wordsHardRef', snap.size));
+    wordsIgnoreRef.get().then(snap => console.log('wordsIgnoreRef', snap.size));
+}
+
 export const WordsPage: React.FC = () => {
     const [loaded, setLoaded] = useState(false);
     const [disabled, setDisabled] = useState(false);
@@ -98,19 +106,19 @@ export const WordsPage: React.FC = () => {
             <div className={cn('word')}>{words[num]}</div>
 
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Легко" onAction={addToEasy} />
+                <Button disabled={disabled} type="secondary" text="Это элементарно" onAction={addToEasy} />
             </div>
             <div className={cn('help')}>Не самая очевидная форма слова</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Нормально" onAction={addToNorm} />
+                <Button disabled={disabled} type="secondary" text="Ну пойдет" onAction={addToNorm} />
             </div>
             <div className={cn('help')}>Сложносочиненное или сложносоставное или редковстречаемое</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Сложно" onAction={addToHard} />
+                <Button disabled={disabled} type="secondary" text="Трууудно" onAction={addToHard} />
             </div>
             <div className={cn('help')}>Если слово совсем не знакомо или узкоспециализировано</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Пропустить" onAction={addToIgnore} />
+                <Button disabled={disabled} type="secondary" text="Че такое" onAction={addToIgnore} />
             </div>
         </div>
     );

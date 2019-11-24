@@ -1,0 +1,86 @@
+@import 'compass/css3', 'styles/default/colors', 'styles/default/mixins';
+.cards {
+    display: table;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+
+    &__wrapper {
+        display: table-cell;
+        vertical-align: middle;
+    }
+
+    &__accept {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 40%;
+
+        &:hover {
+            background-color: rgba(green, 0.1);
+        }
+    }
+
+    &__skip {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 40%;
+        display: flex;
+        align-items: flex-end;
+
+        &:hover {
+            background-color: rgba(red, 0.1);
+        }
+    }
+
+    &__result-title {
+        color: $secondary-dark;
+        width: 100%;
+        text-align: center;
+        vertical-align: top;
+        padding: 40px;
+
+        &--accept {
+            color: green;
+            @include double-shadow(lightgreen);
+        }
+
+        &--skip {
+            color: red;
+            @include double-shadow(red);
+        }
+    }
+
+    &__word {
+        margin-left: auto;
+        margin-right: auto;
+        display: flex;
+        align-items: center;
+        align-content: center;
+        justify-content: center;
+        background-color: #fff;
+        border-radius: 8px;
+        width: 75vmin;
+        height: 75vmin;
+        min-height: 200px;
+        min-width: 200px;
+        max-height: 350px;
+        max-width: 350px;
+        padding: 10px;
+        @include shadow($secondary-dark);
+
+        padding: 10px;
+        font-size: 26px;
+        color: $secondary-text;
+        word-break: break-all;
+
+        &--tldr {
+            font-size: 20px;
+        }
+    }
+}
