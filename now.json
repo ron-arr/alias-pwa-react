@@ -8,19 +8,19 @@
     },
     "routes": [
         {
-            "src": "^/assets/(.*)",
+            "src": "/assets/(.*)",
             "dest": "/assets/$1"
         },
         {
-            "src": "^/assets/favicon.svg",
+            "src": "/assets/favicon.svg",
             "dest": "/favicon.svg"
         },
         {
-            "src": "^/assets/manifest.json",
+            "src": "/assets/manifest.json",
             "dest": "/manifest.json"
         },
         {
-            "src": "^/(.*)",
+            "src": "/(.*)",
             "dest": "/index.html"
         }
     ]
