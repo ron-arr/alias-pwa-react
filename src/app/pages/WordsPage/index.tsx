@@ -1,7 +1,7 @@
 import './styles.scss';
 import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
-import txt from './word_rus_shuffled.txt';
+import txt from 'alias-words/word_rus_shuffled.txt';
 import { Button } from 'als-ui/controls';
 import { db } from 'als-db';
 

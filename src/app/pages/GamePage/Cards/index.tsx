@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { Team } from 'als-models';
 import { Motion, spring, Style } from 'react-motion';
+import { easy as easyWords } from 'alias-words/index';
 
 type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG';
 interface IProps {
@@ -20,7 +21,8 @@ interface IState {
     motionStatus: TMotionStatus;
 }
 const cn = classNameBuilder('cards');
-const words = ['неплатёжеспособность', 'баггист', 'воссоединение', 'передислокация', 'гарантия', 'уторщик'];
+// const words = ['неплатёжеспособность', 'баггист', 'воссоединение', 'передислокация', 'гарантия', 'уторщик'];
+const words = easyWords;
 const springConfig = { stiffness: 330, damping: 60 };
 
 const getWindowDimensions = () => {

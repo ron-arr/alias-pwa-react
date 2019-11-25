@@ -6,6 +6,7 @@ const alias = require('./config/alias');
 
 const isProduction = typeof NODE_ENV !== 'undefined' && NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
+console.info('mode:', mode.toUpperCase());
 const devtool = isProduction ? false : 'inline-source-map';
 const scssRule = {
     test: /\.scss$/,
