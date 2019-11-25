@@ -1,0 +1,16 @@
+{
+    "short_name": "Alias",
+    "name": "Alias (by Ron Arr)",
+    "lang": "ru-RU",
+    "icons": [
+        {
+            "src": "icon.png",
+            "sizes": "128x128",
+            "type": "image/png"
+        }
+    ],
+    "start_url": ".",
+    "display": "fullscreen",
+    "theme_color": "#4527a0",
+    "background_color": "#7953d2"
+}
