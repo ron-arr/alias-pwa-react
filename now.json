@@ -5,23 +5,5 @@
         "env": {
             "NODE_ENV": "production"
         }
-    },
-    "routes": [
-        {
-            "src": "/assets/(.*)",
-            "dest": "/assets/$1"
-        },
-        {
-            "src": "/assets/favicon.svg",
-            "dest": "/favicon.svg"
-        },
-        {
-            "src": "/assets/manifest.json",
-            "dest": "/manifest.json"
-        },
-        {
-            "src": "/(.*)",
-            "dest": "/index.html"
-        }
-    ]
+    }
 }
