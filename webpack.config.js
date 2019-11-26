@@ -4,6 +4,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const alias = require('./config/alias');
 
+const NODE_ENV = process.env.NODE_ENV;
 const isProduction = typeof NODE_ENV !== 'undefined' && NODE_ENV === 'production';
 const mode = isProduction ? 'production' : 'development';
 console.info('mode:', mode.toUpperCase());
@@ -42,7 +43,7 @@ module.exports = [
         entry: { app: './src/app/index.tsx' },
         output: {
             filename: '[name].js',
-            path: path.join(__dirname, 'dist', 'public'),
+            path: path.join(__dirname, 'public'),
             publicPath: '/',
         },
         target: 'web',

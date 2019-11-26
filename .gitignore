@@ -13,8 +13,8 @@
 /coverage
 
 # production
-/dist/public/*
-!/dist/public/assets
+/public/*
+!/public/assets
 
 # misc
 _local/
