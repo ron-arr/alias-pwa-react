@@ -1,27 +1,28 @@
 {
     "version": 2,
     "name": "alias-demo",
-    "build": {
-        "env": {
-            "NODE_ENV": "production"
-        }
-    },
+    "alias": "alias-demo",
     "routes": [
         {
             "src": "^/assets/(.*)",
-            "dest": "/assets/$1"
+            "dest": "/public/assets/$1"
         },
         {
-            "src": "^/assets/favicon.svg",
-            "dest": "/favicon.svg"
+            "src": "^/favicon.svg",
+            "dest": "/public/assets/favicon.svg"
         },
         {
-            "src": "^/assets/manifest.json",
-            "dest": "/manifest.json"
+            "src": "^/manifest.json",
+            "dest": "/public/assets/manifest.json"
         },
         {
             "src": "^/(.*)",
-            "dest": "/index.html"
+            "dest": "/public/index.html"
         }
-    ]
+    ],
+    "github": {
+        "enabled": false,
+        "autoAlias": false,
+        "silent": true
+    }
 }

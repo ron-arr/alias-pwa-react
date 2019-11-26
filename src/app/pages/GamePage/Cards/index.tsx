@@ -3,7 +3,7 @@ import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { Team } from 'als-models';
 import { Motion, spring, Style } from 'react-motion';
-import { easy as easyWords } from 'alias-words/index';
+import { easy as easyWords } from 'alias-words';
 
 type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG';
 interface IProps {

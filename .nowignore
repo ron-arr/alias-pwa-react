@@ -12,9 +12,6 @@
 # testing
 /coverage
 
-# production
-/public
-
 # misc
 _local/
 *.txt
@@ -28,3 +25,12 @@ _local/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# source
+/src
+/config
+/static
+package.json
+package-lock.json
+tsconfig.json
+webpack.config.js
