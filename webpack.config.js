@@ -2,6 +2,7 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 const alias = require('./config/alias');
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -42,7 +43,7 @@ module.exports = [
     {
         entry: { app: './src/app/index.tsx' },
         output: {
-            filename: '[name].js',
+            filename: 'assets/[name].js',
             path: path.join(__dirname, 'public'),
             publicPath: '/',
         },
@@ -72,9 +73,16 @@ module.exports = [
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
         plugins: [
-            new CleanWebpackPlugin(),
+            new CleanWebpackPlugin({
+                exclude: [
+                    path.resolve('public', 'assets', 'favicon.svg'),
+                    path.resolve('public', 'assets', 'icon.png'),
+                    path.resolve('public', 'assets', 'manifest.json'),
+                ],
+            }),
             new HtmlWebpackPlugin({ template: path.resolve('src', 'app', 'index.html') }),
-            new MiniCssExtractPlugin({ filename: '[name].[hash].css' }),
+            new MiniCssExtractPlugin({ filename: 'assets/[name].[hash].css' }),
+            new CopyWebpackPlugin([{ from: './static', to: './assets' }]),
         ],
     },
 ];
