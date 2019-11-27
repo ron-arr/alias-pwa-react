@@ -25,7 +25,7 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
         loaded: Boolean(gameData),
-        game: new Game(gameUid, gameData),
+        game: gameData ? new Game(gameUid, gameData) : null,
     });
     const { game, loaded } = state;
     if (!loaded) {

@@ -29,7 +29,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
         loaded: Boolean(gameData),
-        game: new Game(gameUid, gameData),
+        game: gameData ? new Game(gameUid, gameData) : null,
         status: 'GAME',
     });
     const { game, loaded, status } = state;

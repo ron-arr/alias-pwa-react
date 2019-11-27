@@ -2,7 +2,8 @@ const path = require('path');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
+const WebpackPwaManifest = require('webpack-pwa-manifest');
+
 const alias = require('./config/alias');
 
 const NODE_ENV = process.env.NODE_ENV;
@@ -73,16 +74,31 @@ module.exports = [
             extensions: ['.js', '.jsx', '.ts', '.tsx'],
         },
         plugins: [
-            new CleanWebpackPlugin({
-                exclude: [
-                    path.resolve('public', 'assets', 'favicon.svg'),
-                    path.resolve('public', 'assets', 'icon.png'),
-                    path.resolve('public', 'assets', 'manifest.json'),
+            new CleanWebpackPlugin(),
+            new HtmlWebpackPlugin({
+                template: path.resolve('src', 'app', 'index.html'),
+                favicon: path.resolve('static', 'favicon.ico'),
+                hash: true,
+            }),
+            new MiniCssExtractPlugin({ filename: 'assets/[name].[hash].css' }),
+            new WebpackPwaManifest({
+                ios: true,
+                name: 'Alias (by Ron Arr)',
+                lang: 'ru-RU',
+                short_name: 'Alias',
+                description: 'Играйте в элиас с друзьями!',
+                background_color: '#7953d2',
+                theme_color: '#4527a0',
+                'theme-color': '#4527a0',
+                start_url: '/',
+                icons: [
+                    {
+                        src: path.resolve('static/icon.png'),
+                        sizes: [96, 128, 192, 256, 384, 512],
+                        destination: path.join('assets'),
+                    },
                 ],
             }),
-            new HtmlWebpackPlugin({ template: path.resolve('src', 'app', 'index.html') }),
-            new MiniCssExtractPlugin({ filename: 'assets/[name].[hash].css' }),
-            new CopyWebpackPlugin([{ from: './static', to: './assets' }]),
         ],
     },
 ];

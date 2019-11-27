@@ -8,12 +8,12 @@
             "dest": "/public/assets/$1"
         },
         {
-            "src": "^/favicon.svg",
-            "dest": "/public/assets/favicon.svg"
+            "src": "^/manifest.(.*)",
+            "dest": "/public/manifest.$1"
         },
         {
-            "src": "^/manifest.json",
-            "dest": "/public/assets/manifest.json"
+            "src": "^/favicon.svg",
+            "dest": "/public/favicon.svg"
         },
         {
             "src": "^/(.*)",
