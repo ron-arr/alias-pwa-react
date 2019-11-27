@@ -16,7 +16,7 @@ const handleStart = (settings: GameSettings) => {
     return () => {
         const game = settings.createGame();
         gameRepo.save(game).then(() => {
-            history.push(`/select-teams/${game.uid}`);
+            history.push(`/select-teams/${game.uid}`, { gameData: game.toJson() });
         });
     };
 };

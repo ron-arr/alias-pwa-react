@@ -24,10 +24,12 @@ interface IState {
 interface IProps extends RouteComponentProps<IRouterProps> {}
 const cn = classNameBuilder('game');
 
-export const GamePage: React.FC<IProps> = ({ match }: IProps) => {
+export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
+    const gameData = history.location.state ? history.location.state.gameData : null;
+    const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
-        loaded: false,
-        game: null,
+        loaded: Boolean(gameData),
+        game: new Game(gameUid, gameData),
         status: 'GAME',
     });
     const { game, loaded, status } = state;

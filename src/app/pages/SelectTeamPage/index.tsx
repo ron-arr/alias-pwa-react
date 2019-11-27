@@ -22,13 +22,14 @@ interface IState {
 const cn = classNameBuilder('select-teams');
 
 export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    const gameData = history.location.state ? history.location.state.gameData : null;
+    const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
-        loaded: false,
-        game: null,
+        loaded: Boolean(gameData),
+        game: new Game(gameUid, gameData),
         teamIds: [],
     });
     const { game, loaded, teamIds } = state;
-    const gameUid = match.params.gameUid;
     if (!loaded) {
         gameRepo
             .get(gameUid)
@@ -50,7 +51,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                     game.teamIds = teamIds;
                     game.points = teamIds.map(team => 0);
                     gameRepo.save(game).then(() => {
-                        history.push(`/ready/${game.uid}`);
+                        history.push(`/ready/${game.uid}`, { gameData: game.toJson() });
                     });
                 }
             };

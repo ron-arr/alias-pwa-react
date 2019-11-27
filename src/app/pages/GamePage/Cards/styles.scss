@@ -11,7 +11,7 @@
     overflow: hidden;
 
     &--drag {
-        background: radial-gradient(ellipse at center, transparent 60%, #aaa);
+        background: radial-gradient(ellipse at center, #eee 60%, #aaa);
     }
 
     &__wrapper {
@@ -28,7 +28,7 @@
         height: 40%;
 
         #{$component}--drag-up & {
-            background: linear-gradient(to top, transparent 65%, rgba(rgba(133, 240, 118, 0.938), 0.5));
+            background: linear-gradient(to top, transparent, rgba(132, 240, 118, 0.404));
         }
     }
 
@@ -44,7 +44,7 @@
         background: transparent;
 
         #{$component}--drag-down & {
-            background: linear-gradient(to bottom, transparent 65%, rgba(rgb(173, 66, 120), 0.2));
+            background: linear-gradient(to bottom, transparent, rgba(173, 66, 80, 0.253));
         }
     }
 
@@ -62,12 +62,10 @@
 
         &--accept {
             color: green;
-            // @include double-shadow(lightgreen);
         }
 
         &--skip {
             color: red;
-            // @include double-shadow(red);
         }
 
         #{$component}--drag & {
@@ -90,8 +88,8 @@
         justify-content: center;
         background-color: #fff;
         border-radius: 8px;
-        width: 75vmin;
-        height: 75vmin;
+        width: 70vmin;
+        height: 70vmin;
         min-height: 200px;
         min-width: 200px;
         max-height: 350px;

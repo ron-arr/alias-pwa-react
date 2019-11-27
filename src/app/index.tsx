@@ -1,6 +1,6 @@
 import 'styles/index.scss';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
+import React from 'react';
+import ReactDOM from 'react-dom';
 import { Router, Route } from 'react-router-dom';
 import { routes } from './routes';
 import { browserHistory } from 'als-routes/browserHistory';

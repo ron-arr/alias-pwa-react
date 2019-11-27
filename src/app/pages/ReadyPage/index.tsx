@@ -21,9 +21,11 @@ interface IState {
 const cn = classNameBuilder('ready');
 
 export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    const gameData = history.location.state ? history.location.state.gameData : null;
+    const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
-        loaded: false,
-        game: null,
+        loaded: Boolean(gameData),
+        game: new Game(gameUid, gameData),
     });
     const { game, loaded } = state;
     if (!loaded) {
@@ -39,7 +41,7 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
 
     if (game) {
         const handleContinue = () => {
-            history.push(`/game/${game.uid}`);
+            history.push(`/game/${game.uid}`, { gameData: game.toJson() });
         };
         return (
             <div className={cn()}>
