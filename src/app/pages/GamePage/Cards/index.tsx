@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from
 import { classNameBuilder } from 'als-services/className';
 import { Motion, spring, Style } from 'react-motion';
 import { Timer } from './Timer';
+import { TMotionStatus, getMotionStyle } from './motionStyles';
 
 export type TResult = { num: number; guess: boolean; word: string };
-type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG';
 
 interface IProps {
     words: string[];
@@ -25,7 +25,6 @@ interface IState {
     motionStatus: TMotionStatus;
 }
 const cn = classNameBuilder('cards');
-const springConfig = { stiffness: 330, damping: 60 };
 
 const getWindowDimensions = () => {
     const { innerWidth: width, innerHeight: height } = window;
@@ -163,38 +162,12 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
     };
 
     const handleAlert = useCallback(() => {
-        console.log('handleAlert');
         setState({ ...state, finishReadiness: 'ready' });
     }, []);
 
     const word = words[index];
-    let style: Style = {};
+    const style = getMotionStyle(motionStatus, mouseX, mouseY);
 
-    if (motionStatus === 'DRAG') {
-        style = {
-            scale: spring(1.15, springConfig),
-            shadow: spring(30, springConfig),
-            opacity: 1,
-            x: mouseX,
-            y: mouseY,
-        };
-    } else if (motionStatus === 'CANCEL') {
-        style = {
-            scale: spring(1, { stiffness: 400, damping: 10, precision: 10 }),
-            shadow: spring(1, springConfig),
-            opacity: 1,
-            x: spring(0, springConfig),
-            y: spring(0, springConfig),
-        };
-    } else if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
-        style = {
-            scale: spring(0.2, { stiffness: 400, damping: 50, precision: 0.1 }),
-            opacity: spring(0, { stiffness: 400, damping: 30, precision: 0.1 }),
-            shadow: spring(2, springConfig),
-            x: spring(mouseX, springConfig),
-            y: spring(mouseY, springConfig),
-        };
-    }
     return (
         <div
             className={cn('', {

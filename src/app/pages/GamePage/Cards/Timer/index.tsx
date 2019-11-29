@@ -16,8 +16,10 @@ interface IProps {
     onAlert: () => void;
 }
 
-function useInterval(callback: Function, delay: number | null) {
-    const savedCallback = useRef<Function>();
+type TCallback = () => void;
+
+function useInterval(callback: TCallback, delay: number | null) {
+    const savedCallback = useRef<TCallback>();
 
     useEffect(() => {
         savedCallback.current = callback;
@@ -25,7 +27,7 @@ function useInterval(callback: Function, delay: number | null) {
 
     useEffect(() => {
         function tick() {
-            (savedCallback.current as Function)();
+            (savedCallback.current as TCallback)();
         }
         if (delay !== null) {
             let id = setInterval(tick, delay);
