@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Game } from 'als-models';
-import { gameRepo } from 'als-db';
+import { gameRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
 import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
 import { Button } from 'als-ui/controls';
-import { Cards, TResult } from './Cards';
+import { Cards } from './Cards';
 import { easy as easyWords, hard as hardWords, norm as normWords } from 'alias-words';
 import { shuffle } from 'als-services/utils';
+import { TResult } from 'als-data-types/result';
 
 type TStatus = 'TEAM' | 'GAME';
 
@@ -62,7 +63,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
             console.log('game', game);
             gameRepo.save(game).then(() => {
                 setTimeout(() => {
-                    history.replace(`/ready/${game.uid}`, { gameData: game.toJson() });
+                    history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
                 }, 1500);
                 setState({ ...state, curtain: true });
             });

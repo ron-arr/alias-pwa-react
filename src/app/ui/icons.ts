@@ -4,19 +4,19 @@ export type TTeamIcon = { title: string; Icon: Function };
 
 export const teamIcons: TTeamIcon[] = [
     {
-        title: 'Team 1',
+        title: 'Ангелочки',
         Icon: AngelIcon,
     },
     {
-        title: 'Team 2',
+        title: 'Чувачки',
         Icon: HipsterIcon,
     },
     {
-        title: 'Team 3',
+        title: 'Кофеманы',
         Icon: CoffeeManIcon,
     },
     {
-        title: 'Team 4',
+        title: 'Лгбт',
         Icon: LgbtIcon,
     },
     {

@@ -4,8 +4,8 @@ import { classNameBuilder } from 'als-services/className';
 import { Motion, spring, Style } from 'react-motion';
 import { Timer } from './Timer';
 import { TMotionStatus, getMotionStyle } from './motionStyles';
+import { TResult } from 'als-data-types/result';
 
-export type TResult = { num: number; guess: boolean; word: string };
 
 interface IProps {
     words: string[];

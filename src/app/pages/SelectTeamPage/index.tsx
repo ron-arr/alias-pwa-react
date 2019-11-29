@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { teamIcons } from 'als-ui/icons';
-import { gameRepo } from 'als-db';
+import { gameRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
 import { Game, Team } from 'als-models';
 import { Header } from 'als-components/Header';
@@ -57,7 +57,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                 } else {
                     teamIds.push(iconIndex);
                     gameRepo.save(game).then(() => {
-                        history.replace(`/ready/${game.uid}`, { gameData: game.toJson() });
+                        history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
                     });
                 }
             };

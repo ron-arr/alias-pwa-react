@@ -5,7 +5,7 @@ import { Settings } from 'als-pages/MainPage/Settings';
 import { classNameBuilder } from 'als-services/className';
 import { useHistory } from 'react-router-dom';
 import { GameSettings } from 'als-models';
-import { gameRepo } from 'als-db';
+import { gameRepo } from 'als-db-manager';
 
 interface IProps {}
 

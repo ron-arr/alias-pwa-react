@@ -6,7 +6,7 @@ import { Button } from 'als-ui/controls';
 import { teamIcons } from 'als-ui/icons';
 import { Game } from 'als-models';
 import { Loader } from 'als-components/Loader';
-import { gameRepo } from 'als-db';
+import { gameRepo } from 'als-db-manager';
 import { Header } from 'als-components/Header';
 
 interface IRouterProps {
@@ -18,9 +18,9 @@ interface IState {
     game: null | Game;
 }
 
-const cn = classNameBuilder('ready');
+const cn = classNameBuilder('teams');
 
-export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
+export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
@@ -59,7 +59,7 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
                                 <div className={cn('col')}>
                                     <TeamIcon.Icon width={32} height={32} />
                                 </div>
-                                <div className={cn('col')}>{TeamIcon.title}</div>
+                                <div className={cn('col')}>{team.name}</div>
                                 <div className={cn('col')}>{team.points}</div>
                             </div>
                         );

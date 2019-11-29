@@ -2,8 +2,9 @@ import * as React from 'react';
 import { MainPage } from 'als-pages/MainPage';
 import { GamePage } from 'als-pages/GamePage';
 import { SelectTeamPage } from 'als-pages/SelectTeamPage';
-import { ReadyPage } from 'als-pages/ReadyPage';
+import { TeamsPage } from 'als-pages/TeamsPage';
 import { WordsPage } from 'als-pages/WordsPage';
+import { RoundResultsPage } from 'als-pages/RoundResultsPage';
 
 interface IRoute {
     path: string;
@@ -20,8 +21,12 @@ const routes: IRoute[] = [
         component: SelectTeamPage,
     },
     {
-        path: '/ready/:gameUid',
-        component: ReadyPage,
+        path: '/teams/:gameUid',
+        component: TeamsPage,
+    },
+    {
+        path: '/results/:gameUid',
+        component: RoundResultsPage,
     },
     {
         path: '/game/:gameUid',
