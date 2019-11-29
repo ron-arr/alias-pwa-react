@@ -2,6 +2,7 @@
 
 .button {
     $component: &;
+    pointer-events: auto;
 
     display: inline;
     padding: 15px;
