@@ -5,7 +5,7 @@ import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { teamIcons } from 'als-ui/icons';
 import { gameRepo } from 'als-db';
 import { Loader } from 'als-components/Loader';
-import { Game } from 'als-models';
+import { Game, Team } from 'als-models';
 import { Header } from 'als-components/Header';
 
 interface IRouterProps {
@@ -44,14 +44,20 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
     if (game) {
         const handleChoose = (iconIndex: number) => {
             return () => {
+                game.teams.push(
+                    new Team({
+                        id: iconIndex,
+                        name: teamIcons[iconIndex].title,
+                        points: 0,
+                        lastRound: 0,
+                    })
+                );
                 if (teamIds.length + 1 < game.teamsCount) {
                     setState({ ...state, teamIds: [...teamIds, iconIndex] });
                 } else {
                     teamIds.push(iconIndex);
-                    game.teamIds = teamIds;
-                    game.points = teamIds.map(team => 0);
                     gameRepo.save(game).then(() => {
-                        history.push(`/ready/${game.uid}`, { gameData: game.toJson() });
+                        history.replace(`/ready/${game.uid}`, { gameData: game.toJson() });
                     });
                 }
             };

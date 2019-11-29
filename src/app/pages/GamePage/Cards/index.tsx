@@ -1,16 +1,20 @@
 import './styles.scss';
-import React, { useState, useRef, useEffect, useLayoutEffect } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { Team } from 'als-models';
 import { Motion, spring, Style } from 'react-motion';
-import { easy as easyWords } from 'alias-words';
+import { Timer } from './Timer';
 
+export type TResult = { num: number; guess: boolean; word: string };
 type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG';
+
 interface IProps {
-    team: Team;
-    className?: string;
+    words: string[];
+    onFinish: (results: TResult[]) => void;
 }
+
 interface IState {
+    finishReadiness: 'not' | 'ready' | 'already';
+    results: TResult[];
     mouseY: number;
     mouseX: number;
     topDeltaY: number;
@@ -21,8 +25,6 @@ interface IState {
     motionStatus: TMotionStatus;
 }
 const cn = classNameBuilder('cards');
-// const words = ['неплатёжеспособность', 'баггист', 'воссоединение', 'передислокация', 'гарантия', 'уторщик'];
-const words = easyWords;
 const springConfig = { stiffness: 330, damping: 60 };
 
 const getWindowDimensions = () => {
@@ -33,11 +35,13 @@ const getWindowDimensions = () => {
     };
 };
 
-export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
+export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
     const acceptRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<IState>({
+        finishReadiness: 'not',
+        results: [],
         mouseY: 0,
         mouseX: 0,
         topDeltaY: 0,
@@ -47,7 +51,7 @@ export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
         topBound: windowDimensions.height / 2,
         bottomBound: windowDimensions.height / 2,
     });
-    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound } = state;
+    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, results, finishReadiness } = state;
 
     useLayoutEffect(() => {
         if (acceptRef.current && skipRef.current) {
@@ -65,9 +69,15 @@ export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
 
     useEffect(() => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
-            setTimeout(handleRelease, 300);
+            setTimeout(() => {
+                handleRelease(index);
+            }, 300);
         }
-    }, [motionStatus]);
+        if (motionStatus == 'CANCEL' && finishReadiness === 'ready') {
+            onFinish(results);
+            setState({ ...state, finishReadiness: 'already' });
+        }
+    }, [motionStatus, finishReadiness]);
 
     const handleTouchMove = (event: React.TouchEvent) => {
         event.preventDefault();
@@ -114,13 +124,15 @@ export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
         handleMove(pageY, pageX);
     };
 
-    const handleAccept = () => {
-        if (index === words.length - 1) {
-            setState({ ...state, index: 0 });
-        } else {
-            setState({ ...state, index: index + 1 });
-        }
+    const handleAcceptSkip = (guess: boolean) => {
+        results.push({
+            num: index + 1,
+            guess: guess,
+            word: words[index],
+        });
+        setState({ ...state, index: index + 1, results });
     };
+
     const handleDrag = (pressX: number, pressY: number, pageX: number, pageY: number) => {
         setState({
             ...state,
@@ -139,11 +151,21 @@ export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
         handleDrag(pressX, pressY, pageX, pageY);
     };
 
-    const handleRelease = () => {
+    const handleRelease = (index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
-            setState({ ...state, motionStatus: 'CANCEL', index: index === words.length - 1 ? 0 : index + 1 });
+            results.push({
+                num: index + 1,
+                guess: motionStatus === 'ACCEPT',
+                word: words[index],
+            });
+            setState({ ...state, motionStatus: 'CANCEL', index: index + 1, results });
         }
     };
+
+    const handleAlert = useCallback(() => {
+        console.log('handleAlert');
+        setState({ ...state, finishReadiness: 'ready' });
+    }, []);
 
     const word = words[index];
     let style: Style = {};
@@ -175,30 +197,27 @@ export const Cards: React.FC<IProps> = ({ className, team }: IProps) => {
     }
     return (
         <div
-            className={cn(
-                '',
-                {
-                    drag: motionStatus === 'DRAG',
-                    'drag-up': motionStatus === 'DRAG' && topBound > mouseY + topDeltaY,
-                    'drag-down': motionStatus === 'DRAG' && bottomBound < mouseY + topDeltaY,
-                },
-                [className]
-            )}
+            className={cn('', {
+                drag: motionStatus === 'DRAG',
+                'drag-up': motionStatus === 'DRAG' && topBound > mouseY + topDeltaY,
+                'drag-down': motionStatus === 'DRAG' && bottomBound < mouseY + topDeltaY,
+            })}
             onMouseMove={handleMouseMove}
             onTouchMove={handleTouchMove}
             onMouseUp={handleMouseUp}
         >
             <div className={cn('accept')} ref={acceptRef}>
-                <button className={cn('btn-title', { accept: true })} onClick={handleAccept}>
+                <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip(true)}>
                     Верно
                 </button>
             </div>
             <div className={cn('skip')} ref={skipRef}>
-                <button className={cn('btn-title', { skip: true })} onClick={handleAccept}>
+                <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip(false)}>
                     Пропустить
                 </button>
             </div>
             <div className={cn('wrapper')}>
+                <Timer className={cn('timer')} totalSeconds={6} msStartAt={5} onAlert={handleAlert} />
                 <Motion style={style}>
                     {({ scale, shadow, opacity, x, y }) => (
                         <div

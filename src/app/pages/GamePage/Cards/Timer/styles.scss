@@ -1,0 +1,26 @@
+.timer {
+    display: inline-flex;
+    align-items: flex-end;
+    font-size: 24px;
+
+    &__hour {
+        display: inline-flex;
+
+        &:after {
+            content: ':';
+        }
+    }
+
+    &__seconds {
+        display: inline-flex;
+    }
+
+    &__miliseconds {
+        display: inline-flex;
+        font-size: 20px;
+
+        &::before {
+            content: '.';
+        }
+    }
+}

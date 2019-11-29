@@ -17,6 +17,7 @@
     &__wrapper {
         display: table-cell;
         vertical-align: middle;
+        text-align: center;
     }
 
     &__accept {
@@ -109,6 +110,18 @@
 
         &--tldr {
             font-size: 20px;
+        }
+    }
+
+    &__timer {
+        margin-bottom: 8px;
+        visibility: visible;
+        transition: visibility 0s, opacity 0.5s linear;
+
+        #{$component}--drag & {
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0.25s, opacity 0.25s linear;
         }
     }
 }

@@ -34,8 +34,7 @@ export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, 
         <div className={cn()}>
             <ul className={cn('list')}>
                 <li className={cn('dropdown')}>
-                    <input className={cn('check')} type="checkbox" checked={open} onChange={handleCheckChange} />
-                    <button className={cn('toggle')} data-toggle="dropdown">
+                    <button className={cn('toggle', { open: open })} data-toggle="dropdown" onClick={handleCheckChange}>
                         {title}
                     </button>
                     <ul className={cn('items')}>

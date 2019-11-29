@@ -41,7 +41,7 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
 
     if (game) {
         const handleContinue = () => {
-            history.push(`/game/${game.uid}`, { gameData: game.toJson() });
+            history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
         };
         return (
             <div className={cn()}>
@@ -49,20 +49,21 @@ export const ReadyPage: React.FC<IProps> = ({ history, match }: IProps) => {
                 <div className={cn('table')}>
                     <div className={cn('row')}>
                         <div className={cn('col')}></div>
-                        <div className={cn('col', { th: true })}>Команда</div>
-                        <div className={cn('col', { th: true })}>Очки</div>
+                        <div className={cn('col', { head: true })}>Команда</div>
+                        <div className={cn('col', { head: true })}>Очки</div>
                     </div>
-                    {teamIcons.map((TeamIcon, index) =>
-                        ~game.teamIds.indexOf(index) ? (
-                            <div key={index} className={cn('row')}>
+                    {game.teams.map(team => {
+                        const TeamIcon = teamIcons[team.id];
+                        return (
+                            <div key={team.id} className={cn('row')}>
                                 <div className={cn('col')}>
                                     <TeamIcon.Icon width={32} height={32} />
                                 </div>
                                 <div className={cn('col')}>{TeamIcon.title}</div>
-                                <div className={cn('col')}>0</div>
+                                <div className={cn('col')}>{team.points}</div>
                             </div>
-                        ) : null
-                    )}
+                        );
+                    })}
                 </div>
                 <div className={cn('btn')}>
                     <Button text={'Продолжить'} type="secondary" onAction={handleContinue} />

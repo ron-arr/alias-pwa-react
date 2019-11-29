@@ -8,7 +8,9 @@ import { Loader } from 'als-components/Loader';
 import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
 import { Button } from 'als-ui/controls';
-import { Cards } from './Cards';
+import { Cards, TResult } from './Cards';
+import { easy as easyWords, hard as hardWords, norm as normWords } from 'alias-words';
+import { shuffle } from 'als-services/utils';
 
 type TStatus = 'TEAM' | 'GAME';
 
@@ -17,6 +19,7 @@ interface IRouterProps {
 }
 interface IState {
     loaded: boolean;
+    curtain: boolean;
     game: null | Game;
     status: TStatus;
 }
@@ -29,10 +32,11 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
         loaded: Boolean(gameData),
+        curtain: false,
         game: gameData ? new Game(gameUid, gameData) : null,
-        status: 'GAME',
+        status: 'TEAM',
     });
-    const { game, loaded, status } = state;
+    const { game, loaded, status, curtain } = state;
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
@@ -44,7 +48,36 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
             });
     }
     if (game && game.currentTeam) {
-        const handleStart = () => () => {};
+        const handleStart = () => {
+            setState({ ...state, status: 'GAME' });
+        };
+        const handleFinish = (results: TResult[]) => {
+            console.log('handleFinish')
+            const points = results.reduce((a, result) => a + (result.guess ? 1 : -1), 0);
+            console.log('points', points);
+            game.setPointsForCurrentTeam(points);
+            if (game.isRoundPlayed()) {
+                game.round += 1;
+            }
+            console.log('game', game);
+            gameRepo.save(game).then(() => {
+                setTimeout(() => {
+                    history.replace(`/ready/${game.uid}`, { gameData: game.toJson() });
+                }, 1500);
+                setState({ ...state, curtain: true });
+            });
+        };
+
+        let words;
+        if (game.level === 3) {
+            words = hardWords;
+        } else if (game.level === 2) {
+            words = normWords;
+        } else {
+            words = easyWords;
+        }
+
+        words = shuffle(words);
 
         return (
             <div className={cn()}>
@@ -55,7 +88,8 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>
                 )}
-                {status === 'GAME' && <Cards team={game.currentTeam} />}
+                {status === 'GAME' && <Cards words={words} onFinish={handleFinish} />}
+                {curtain && <div className={cn('curtain')}></div>}
             </div>
         );
     } else if (!loaded) {
