@@ -8,6 +8,8 @@ import { Loader } from 'als-components/Loader';
 import { gameRepo, resultRepo } from 'als-db-manager';
 import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
+import { CheckFlip } from 'als-components/CheckFlip';
+import { TResult } from 'als-data-types/result';
 
 interface IRouterProps {
     resultUid: string;
@@ -48,6 +50,11 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         const handleContinue = () => {
             history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
         };
+        const handleGuess = (result: TResult) => {
+            return (value: boolean) => {
+                result.guess = value;
+            };
+        };
         return (
             <div className={cn()}>
                 <Header title={'Результат'} />
@@ -60,7 +67,9 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
                         return (
                             <div key={index} className={cn('row')}>
                                 <div className={cn('col')}>{result.word}</div>
-                                <div className={cn('col')}>{result.guess.toString()}</div>
+                                <div className={cn('col')}>
+                                    <CheckFlip value={result.guess} onChange={handleGuess(result)} />
+                                </div>
                             </div>
                         );
                     })}
