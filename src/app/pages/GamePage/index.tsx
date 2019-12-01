@@ -1,5 +1,5 @@
 import './styles.scss';
-import React, { useState } from 'react';
+import React, { useState, useCallback, useEffect, useMemo } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Game, Result } from 'als-models';
@@ -38,6 +38,20 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         status: 'TEAM',
     });
     const { game, loaded, status, disabled } = state;
+    let words = useMemo(() => {
+        let _words;
+        if (game) {
+            if (game.level === 3) {
+                _words = hardWords;
+            } else if (game.level === 2) {
+                _words = normWords;
+            } else {
+                _words = easyWords;
+            }
+            _words = shuffle(_words);
+        }
+        return _words;
+    }, [game]);
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
@@ -52,37 +66,27 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         const handleStart = () => {
             setState({ ...state, status: 'GAME' });
         };
-        const handleFinish = (result: Result) => {
-            const points = result.getPoints();
-            game.setPointsForCurrentTeam(points);
+        const handleFinish = useCallback(
+            (result: Result) => {
+                const points = result.getPoints();
+                game.setPointsForCurrentTeam(points);
 
-            if (game.isRoundPlayed()) {
-                game.round += 1;
-            }
-            console.log('game', game);
-            const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
-            saveReqs.then(() => {
-                setTimeout(() => {
-                    history.replace(`/results/${result.uid}`, {
-                        gameData: game.toJson(),
-                        resultData: result.toJson(),
-                    });
-                }, 1500);
-                setState({ ...state, disabled: true });
-            });
-        };
-
-        let words;
-        if (game.level === 3) {
-            words = hardWords;
-        } else if (game.level === 2) {
-            words = normWords;
-        } else {
-            words = easyWords;
-        }
-
-        words = shuffle(words);
-
+                if (game.isRoundPlayed()) {
+                    game.round += 1;
+                }
+                const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
+                saveReqs.then(() => {
+                    setTimeout(() => {
+                        history.replace(`/results/${result.uid}`, {
+                            gameData: game.toJson(),
+                            resultData: result.toJson(),
+                        });
+                    }, 3000);
+                    setState({ ...state, status: 'GAME', disabled: true });
+                });
+            },
+            [game]
+        );
         return (
             <div className={cn()}>
                 {status === 'TEAM' && (
@@ -92,7 +96,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>
                 )}
-                {status === 'GAME' && <Cards gameUid={gameUid} words={words} onFinish={handleFinish} />}
+                {status === 'GAME' && words && <Cards gameUid={gameUid} words={words} onFinish={handleFinish} />}
                 {disabled && <Curtain />}
             </div>
         );

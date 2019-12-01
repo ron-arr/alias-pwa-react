@@ -1,4 +1,4 @@
-export type TResult = { num: number; guess: boolean; word: string };
+export type TResult = { guess: boolean; word: string };
 
 export interface IResultData {
     gameUid: string;

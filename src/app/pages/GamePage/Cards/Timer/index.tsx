@@ -74,10 +74,8 @@ const Timer: React.FunctionComponent<IProps> = ({ totalSeconds, msStartAt, class
     }, delay);
 
     if (status === 'stop') {
-        console.log('status', status);
         setState({ ...state, status: 'sendAlert' });
     } else if (status === 'sendAlert') {
-        console.log('status', status);
         onAlert();
     }
 

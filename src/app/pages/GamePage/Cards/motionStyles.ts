@@ -1,6 +1,6 @@
 import { Style, spring } from 'react-motion';
 
-export type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG';
+export type TMotionStatus = 'CANCEL' | 'ACCEPT' | 'SKIP' | 'DRAG' | 'STOP';
 
 const defaultConfig = { stiffness: 330, damping: 60 };
 
@@ -15,7 +15,7 @@ export const getMotionStyle = (status: TMotionStatus, x: number, y: number): Sty
             x: x,
             y: y,
         };
-    } else if (status === 'CANCEL') {
+    } else if (status === 'CANCEL' || 'STOP') {
         style = {
             scale: spring(1, { stiffness: 400, damping: 10, precision: 10 }),
             shadow: spring(1, defaultConfig),

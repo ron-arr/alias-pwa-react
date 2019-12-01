@@ -1,9 +1,11 @@
 .round-results {
     width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
     align-items: center;
     overflow-y: auto;
+    pointer-events: auto;
 
     &__table {
         padding: 20px 30px;
@@ -33,7 +35,8 @@
     }
 
     &__btn {
-        display: inline-flex;
+        width: 90%;
         align-self: center;
+        margin-bottom: 40px;
     }
 }

@@ -24,8 +24,6 @@ const cn = classNameBuilder('round-results');
 
 export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
     let { gameData = undefined, resultData = undefined }: THistoryState = history.location.state ? history.location.state : {};
-    console.log('resultData', resultData);
-    console.log('gameData', gameData);
     const resultUid = match.params.resultUid;
     const [state, setState] = useState<IState>({
         loaded: Boolean(gameData && resultData),
@@ -33,8 +31,6 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         game: gameData && resultData ? new Game(resultData.gameUid, gameData) : null,
     });
     const { game, result, loaded } = state;
-    console.log('result', result);
-    console.log('game', game);
     if (!loaded) {
         resultRepo
             .get(resultUid)
@@ -69,9 +65,7 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
                         );
                     })}
                 </div>
-                <div className={cn('btn')}>
-                    <Button text={'Продолжить'} type="secondary" onAction={handleContinue} />
-                </div>
+                <Button className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleContinue} />
             </div>
         );
     } else if (!loaded) {

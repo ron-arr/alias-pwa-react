@@ -1,5 +1,5 @@
 import './styles.scss';
-import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useLayoutEffect, useCallback, memo } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { Motion } from 'react-motion';
 import { Timer } from './Timer';
@@ -13,11 +13,10 @@ interface IProps {
 }
 
 interface IState {
-    finishReadiness: 'not' | 'ready' | 'already';
     result: Result;
     mouseY: number;
     mouseX: number;
-    topDeltaY: number;
+    topDeltaY: number; 
     leftDeltaX: number;
     index: number;
     topBound: number;
@@ -34,12 +33,11 @@ const getWindowDimensions = () => {
     };
 };
 
-export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
+const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
     const acceptRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<IState>({
-        finishReadiness: 'not',
         result: new Result(gameUid),
         mouseY: 0,
         mouseX: 0,
@@ -50,7 +48,7 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
         topBound: windowDimensions.height / 2,
         bottomBound: windowDimensions.height / 2,
     });
-    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, result, finishReadiness } = state;
+    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, result } = state;
 
     useLayoutEffect(() => {
         if (acceptRef.current && skipRef.current) {
@@ -67,16 +65,16 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
     }, [windowDimensions]);
 
     useEffect(() => {
+
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             setTimeout(() => {
                 handleRelease(index);
             }, 300);
         }
-        if (motionStatus == 'CANCEL' && finishReadiness === 'ready') {
+        if (motionStatus == 'STOP') {
             onFinish(result);
-            setState({ ...state, finishReadiness: 'already' });
         }
-    }, [motionStatus, finishReadiness]);
+    }, [motionStatus]);
 
     const handleTouchMove = (event: React.TouchEvent) => {
         event.preventDefault();
@@ -139,7 +137,7 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
             leftDeltaX: pageX - pressX,
             mouseY: pressY,
             mouseX: pressX,
-            motionStatus: 'DRAG',
+            motionStatus: motionStatus !== 'STOP' ? 'DRAG' : motionStatus,
         });
     };
     const handleMouseDown = (pressY: number, pressX: number, { pageY, pageX }: React.MouseEvent) => {
@@ -153,7 +151,6 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
     const handleRelease = (index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             result.add({
-                num: index + 1,
                 guess: motionStatus === 'ACCEPT',
                 word: words[index],
             });
@@ -162,7 +159,7 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
     };
 
     const handleAlert = useCallback(() => {
-        setState({ ...state, finishReadiness: 'ready' });
+        setState({ ...state, motionStatus: 'STOP' });
     }, []);
 
     const word = words[index];
@@ -213,3 +210,7 @@ export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) =>
         </div>
     );
 };
+
+
+const memoCards = memo(Cards);
+export {memoCards as Cards};
