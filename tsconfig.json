@@ -25,7 +25,7 @@
             "als-services/*": ["./src/services/*"],
             "als-icons/*": ["src/jsxIcons/*"],
             "styles/*": ["./src/assets/styles/*"],
-            "als-db-manager": ["als-db-manager/index.ts"]
+            "als-db-manager": ["src/dbManager/index.ts"]
         }
     },
     "include": ["src", "index.tsx"],

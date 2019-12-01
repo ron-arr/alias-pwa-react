@@ -1,38 +1,40 @@
 import './styles.scss';
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'als-ui/controls';
 import { Settings } from 'als-pages/MainPage/Settings';
 import { classNameBuilder } from 'als-services/className';
 import { useHistory } from 'react-router-dom';
 import { GameSettings } from 'als-models';
 import { gameRepo } from 'als-db-manager';
-
-interface IProps {}
+import { Curtain } from 'als-components/Curtain';
 
 const cn = classNameBuilder('main');
 
-const handleStart = (settings: GameSettings) => {
+export const MainPage: React.FC = () => {
+    console.log('MainPage render');
+    const [disabled, setDisabled] = useState(false);
     const history = useHistory();
-    return () => {
+
+    const handleStart = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setDisabled(true);
         const game = settings.createGame();
         gameRepo.save(game).then(() => {
             history.replace(`/select-teams/${game.uid}`, { gameData: game.toJson() });
         });
     };
-};
-
-export const MainPage: React.FC<IProps> = (props: IProps) => {
     let settings = new GameSettings();
     return (
         <div className={cn()}>
+            {disabled && <Curtain />}
             <div className={cn('title')}>Alias</div>
             <Settings
+                disabled={disabled}
                 settings={settings}
                 onChangeSettings={(fieldName, value) => {
                     settings[fieldName] = value;
                 }}
             />
-            <Button className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleStart(settings)} />
+            <Button disabled={disabled} className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleStart} />
         </div>
     );
 };

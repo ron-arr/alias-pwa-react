@@ -1,20 +1,20 @@
 import './styles.scss';
 import React, { useState, useRef, useEffect, useLayoutEffect, useCallback } from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { Motion, spring, Style } from 'react-motion';
+import { Motion } from 'react-motion';
 import { Timer } from './Timer';
 import { TMotionStatus, getMotionStyle } from './motionStyles';
-import { TResult } from 'als-data-types/result';
-
+import { Result } from 'als-models';
 
 interface IProps {
+    gameUid: string;
     words: string[];
-    onFinish: (results: TResult[]) => void;
+    onFinish: (result: Result) => void;
 }
 
 interface IState {
     finishReadiness: 'not' | 'ready' | 'already';
-    results: TResult[];
+    result: Result;
     mouseY: number;
     mouseX: number;
     topDeltaY: number;
@@ -34,13 +34,13 @@ const getWindowDimensions = () => {
     };
 };
 
-export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
+export const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
     const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
     const acceptRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState<IState>({
         finishReadiness: 'not',
-        results: [],
+        result: new Result(gameUid),
         mouseY: 0,
         mouseX: 0,
         topDeltaY: 0,
@@ -50,7 +50,7 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
         topBound: windowDimensions.height / 2,
         bottomBound: windowDimensions.height / 2,
     });
-    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, results, finishReadiness } = state;
+    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, result, finishReadiness } = state;
 
     useLayoutEffect(() => {
         if (acceptRef.current && skipRef.current) {
@@ -73,7 +73,7 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
             }, 300);
         }
         if (motionStatus == 'CANCEL' && finishReadiness === 'ready') {
-            onFinish(results);
+            onFinish(result);
             setState({ ...state, finishReadiness: 'already' });
         }
     }, [motionStatus, finishReadiness]);
@@ -123,13 +123,13 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
         handleMove(pageY, pageX);
     };
 
-    const handleAcceptSkip = (guess: boolean) => {
-        results.push({
-            num: index + 1,
-            guess: guess,
-            word: words[index],
+    const handleAcceptSkip = (motionStatus: TMotionStatus) => {
+        setState({
+            ...state,
+            index: index + 1,
+            motionStatus,
+            mouseY: Number(motionStatus === 'SKIP'),
         });
-        setState({ ...state, index: index + 1, results });
     };
 
     const handleDrag = (pressX: number, pressY: number, pageX: number, pageY: number) => {
@@ -152,12 +152,12 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
 
     const handleRelease = (index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
-            results.push({
+            result.add({
                 num: index + 1,
                 guess: motionStatus === 'ACCEPT',
                 word: words[index],
             });
-            setState({ ...state, motionStatus: 'CANCEL', index: index + 1, results });
+            setState({ ...state, motionStatus: 'CANCEL', index: index + 1, result });
         }
     };
 
@@ -180,12 +180,12 @@ export const Cards: React.FC<IProps> = ({ words, onFinish }: IProps) => {
             onMouseUp={handleMouseUp}
         >
             <div className={cn('accept')} ref={acceptRef}>
-                <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip(true)}>
+                <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip('ACCEPT')}>
                     Верно
                 </button>
             </div>
             <div className={cn('skip')} ref={skipRef}>
-                <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip(false)}>
+                <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip('SKIP')}>
                     Пропустить
                 </button>
             </div>

@@ -32,7 +32,7 @@
         background: $primary;
         @include double-shadow($primary-dark);
         @include text-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
-        padding: 10px;
+        padding: 10px 25px 10px 10px;
 
         &:before {
             position: absolute;
@@ -78,7 +78,7 @@
     }
 
     &__item-btn {
-        z-index: 30;
+        z-index: 10;
         display: block;
         width: 100%;
         color: darken($secondary-text, 50%);

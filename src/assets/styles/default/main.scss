@@ -10,6 +10,7 @@ body {
     display: flex;
     font-size: $font-size;
     height: 100%;
+    overflow-y: hidden;
 }
 
 #content {

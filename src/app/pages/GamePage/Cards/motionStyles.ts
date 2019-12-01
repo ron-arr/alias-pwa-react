@@ -24,9 +24,7 @@ export const getMotionStyle = (status: TMotionStatus, x: number, y: number): Sty
             y: spring(0, defaultConfig),
         };
     } else if (status === 'ACCEPT' || status === 'SKIP') {
-        console.log('y1', y)
         y = y > 0 ? y + 300 : y - 300;
-        console.log('y2', y)
         style = {
             scale: spring(0.2, { stiffness: 400, damping: 50, precision: 1 }),
             opacity: spring(0, { stiffness: 400, damping: 30, precision: 1 }),

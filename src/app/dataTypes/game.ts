@@ -5,6 +5,7 @@ export type TRoundTime = 30 | 60 | 90 | 120;
 
 export interface IGameData {
     teamsCount: number;
+    pointCounts: number;
     level: TLevel;
     roundTime: TRoundTime;
     round: number;

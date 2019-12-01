@@ -50,6 +50,7 @@
 
     &__btn-title {
         z-index: 2;
+        pointer-events: auto;
         letter-spacing: 4px;
         visibility: visible;
         color: $secondary-dark;

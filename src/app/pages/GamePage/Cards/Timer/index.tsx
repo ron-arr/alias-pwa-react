@@ -48,8 +48,6 @@ const Timer: React.FunctionComponent<IProps> = ({ totalSeconds, msStartAt, class
     });
 
     const { seconds, miliseconds, status, delay } = state;
-    console.log('delay', delay);
-
     useInterval(() => {
         if (status === 'sec') {
             const updates = { ...state, seconds: seconds - 1 };

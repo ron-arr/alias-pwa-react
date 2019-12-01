@@ -7,12 +7,14 @@ export class GameSettings {
     teamsCount: number;
     level: TLevel;
     roundTime: TRoundTime;
+    pointCounts: number;
 
     constructor() {
         this.gameUid = getRandomString();
         this.teamsCount = 2;
         this.level = 1;
         this.roundTime = 60;
+        this.pointCounts = 30;
     }
 
     createGame() {
@@ -20,6 +22,7 @@ export class GameSettings {
             level: this.level,
             roundTime: this.roundTime,
             teamsCount: this.teamsCount,
+            pointCounts: this.pointCounts,
             round: 1,
             teams: [],
         });
@@ -54,5 +57,9 @@ export class GameSettings {
             { title: '1 мин 30 сек', value: 90 },
             { title: '2 мин', value: 120 },
         ];
+    }
+
+    static getPointCounts(): number[] {
+        return [30, 40, 50, 60];
     }
 }

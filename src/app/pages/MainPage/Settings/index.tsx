@@ -9,6 +9,7 @@ import { TLevel, TRoundTime } from 'als-data-types/game';
 const TEAM_BASE_TITLE = 'Количество команд';
 const LEVEL_BASE_TITLE = 'Уровень';
 const ROUND_DUR_BASE_TITLE = 'Время раунда';
+const POINT_COUNTS_TITLE = 'Количество очков для победы';
 
 const cn = classNameBuilder('game-settings');
 
@@ -17,16 +18,19 @@ export type TUpdateSettings = <K extends keyof GameSettings, T extends GameSetti
 interface IProps {
     settings: GameSettings;
     onChangeSettings: TUpdateSettings;
+    disabled?: boolean;
 }
 
-export const Settings: React.FC<IProps> = ({ settings, onChangeSettings }) => {
+export const Settings: React.FC<IProps> = ({ settings, onChangeSettings, disabled }) => {
     const [teamTitle, setTeamTitle] = useState(`${TEAM_BASE_TITLE}: ${settings.teamsCount}`);
     const [levelTitle, setLevelTitle] = useState(`${LEVEL_BASE_TITLE}: ${settings.levelTitle}`);
     const [roundDurTitle, setRoundDurTitle] = useState(`${ROUND_DUR_BASE_TITLE}: ${settings.roundTimeTitle}`);
+    const [pointCountsTitle, setPointCounts] = useState(`${POINT_COUNTS_TITLE}: ${settings.pointCounts}`);
 
     return (
         <div className={cn()}>
             <DropdownMenu
+                disabled={disabled}
                 title={teamTitle}
                 items={GameSettings.getTeamsCount()}
                 closeOnSelect={true}
@@ -36,6 +40,7 @@ export const Settings: React.FC<IProps> = ({ settings, onChangeSettings }) => {
                 }}
             />
             <DropdownMenu<TOptionDropdown<TLevel>>
+                disabled={disabled}
                 title={levelTitle}
                 items={GameSettings.getLevels()}
                 closeOnSelect={true}
@@ -45,12 +50,23 @@ export const Settings: React.FC<IProps> = ({ settings, onChangeSettings }) => {
                 }}
             />
             <DropdownMenu<TOptionDropdown<TRoundTime>>
+                disabled={disabled}
                 title={roundDurTitle}
                 items={GameSettings.getRoundTimes()}
                 closeOnSelect={true}
                 onSelect={roundTime => {
                     onChangeSettings('roundTime', roundTime.value);
                     setRoundDurTitle(`${ROUND_DUR_BASE_TITLE}: ${roundTime.title}`);
+                }}
+            />
+            <DropdownMenu
+                disabled={disabled}
+                title={pointCountsTitle}
+                items={GameSettings.getPointCounts()}
+                closeOnSelect={true}
+                onSelect={pointCounts => {
+                    onChangeSettings('pointCounts', pointCounts);
+                    setPointCounts(`${POINT_COUNTS_TITLE}: ${pointCounts}`);
                 }}
             />
         </div>

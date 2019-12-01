@@ -14,10 +14,11 @@ interface IProps<T> {
     title: string;
     items: T[];
     closeOnSelect?: boolean;
+    disabled?: boolean;
     onSelect: (value: T) => void;
 }
 
-export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, items, closeOnSelect, onSelect }: IProps<T>) => {
+export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, items, closeOnSelect, onSelect, disabled }: IProps<T>) => {
     const [open, setOpen] = React.useState(false);
     const handleSelect = (index: number) => {
         return (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -34,13 +35,18 @@ export const DropdownMenu = <T extends TOptionValue | TOptionDropdown>({ title, 
         <div className={cn()}>
             <ul className={cn('list')}>
                 <li className={cn('dropdown')}>
-                    <button className={cn('toggle', { open: open })} data-toggle="dropdown" onClick={handleCheckChange}>
+                    <button
+                        className={cn('toggle', { open: open && !disabled })}
+                        data-toggle="dropdown"
+                        onClick={handleCheckChange}
+                        disabled={disabled}
+                    >
                         {title}
                     </button>
                     <ul className={cn('items')}>
                         {items.map((item: TOptionValue | TOptionDropdown, index: number) => (
                             <li key={index} className={cn('item')}>
-                                <button className={cn('item-btn')} onClick={handleSelect(index)}>
+                                <button className={cn('item-btn')} onClick={handleSelect(index)} disabled={disabled}>
                                     {typeof item === 'object' ? item.title : item}
                                 </button>
                             </li>

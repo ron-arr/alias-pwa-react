@@ -1,12 +1,12 @@
 import { IGameData } from 'als-data-types/game';
 import { Team } from 'als-models';
-import { teamIcons } from 'als-ui/icons';
 
 const ROUND_TITLES = ['Первый', 'Второй', 'Третий'];
 
 export class Game {
     uid: string;
     teamsCount: number;
+    pointCounts: number;
     level: 1 | 2 | 3;
     roundTime: 30 | 60 | 90 | 120;
     round: number;
@@ -16,6 +16,7 @@ export class Game {
         this.uid = uid;
         this.level = data.level;
         this.teamsCount = data.teamsCount;
+        this.pointCounts = data.pointCounts;
         this.roundTime = data.roundTime;
         this.round = data.round;
         this.teams = data.teams.map(teamData => new Team(teamData));
@@ -24,6 +25,7 @@ export class Game {
     toJson(): IGameData {
         return {
             teamsCount: this.teamsCount,
+            pointCounts: this.pointCounts,
             level: this.level,
             roundTime: this.roundTime,
             teams: this.teams.map(team => team.toJson()),

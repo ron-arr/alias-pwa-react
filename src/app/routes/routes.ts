@@ -5,6 +5,7 @@ import { SelectTeamPage } from 'als-pages/SelectTeamPage';
 import { TeamsPage } from 'als-pages/TeamsPage';
 import { WordsPage } from 'als-pages/WordsPage';
 import { RoundResultsPage } from 'als-pages/RoundResultsPage';
+import { Loader } from 'als-components/Loader';
 
 interface IRoute {
     path: string;
@@ -25,7 +26,7 @@ const routes: IRoute[] = [
         component: TeamsPage,
     },
     {
-        path: '/results/:gameUid',
+        path: '/results/:resultUid',
         component: RoundResultsPage,
     },
     {
@@ -35,6 +36,10 @@ const routes: IRoute[] = [
     {
         path: '/words',
         component: WordsPage,
+    },
+    {
+        path: '/loading',
+        component: Loader,
     },
 ];
 

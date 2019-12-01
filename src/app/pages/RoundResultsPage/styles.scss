@@ -1,0 +1,39 @@
+.round-results {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: auto;
+
+    &__table {
+        padding: 20px 30px;
+        max-width: 350px;
+        width: 100%;
+    }
+
+    &__row {
+        margin: 12px 0;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    &__col {
+        display: inline-flex;
+        line-height: 32px;
+        vertical-align: middle;
+
+        &:nth-child(1) {
+            flex-grow: 1;
+        }
+
+        &--head {
+            font-weight: 600;
+        }
+    }
+
+    &__btn {
+        display: inline-flex;
+        align-self: center;
+    }
+}

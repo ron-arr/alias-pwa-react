@@ -2,8 +2,8 @@ import './styles.scss';
 import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { Game } from 'als-models';
-import { gameRepo } from 'als-db-manager';
+import { Game, Result } from 'als-models';
+import { gameRepo, resultRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
 import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
@@ -11,7 +11,7 @@ import { Button } from 'als-ui/controls';
 import { Cards } from './Cards';
 import { easy as easyWords, hard as hardWords, norm as normWords } from 'alias-words';
 import { shuffle } from 'als-services/utils';
-import { TResult } from 'als-data-types/result';
+import { Curtain } from 'als-components/Curtain';
 
 type TStatus = 'TEAM' | 'GAME';
 
@@ -20,7 +20,7 @@ interface IRouterProps {
 }
 interface IState {
     loaded: boolean;
-    curtain: boolean;
+    disabled: boolean;
     game: null | Game;
     status: TStatus;
 }
@@ -33,11 +33,11 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
         loaded: Boolean(gameData),
-        curtain: false,
+        disabled: false,
         game: gameData ? new Game(gameUid, gameData) : null,
         status: 'TEAM',
     });
-    const { game, loaded, status, curtain } = state;
+    const { game, loaded, status, disabled } = state;
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
@@ -52,20 +52,23 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         const handleStart = () => {
             setState({ ...state, status: 'GAME' });
         };
-        const handleFinish = (results: TResult[]) => {
-            console.log('handleFinish')
-            const points = results.reduce((a, result) => a + (result.guess ? 1 : -1), 0);
-            console.log('points', points);
+        const handleFinish = (result: Result) => {
+            const points = result.getPoints();
             game.setPointsForCurrentTeam(points);
+
             if (game.isRoundPlayed()) {
                 game.round += 1;
             }
             console.log('game', game);
-            gameRepo.save(game).then(() => {
+            const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
+            saveReqs.then(() => {
                 setTimeout(() => {
-                    history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
+                    history.replace(`/results/${result.uid}`, {
+                        gameData: game.toJson(),
+                        resultData: result.toJson(),
+                    });
                 }, 1500);
-                setState({ ...state, curtain: true });
+                setState({ ...state, disabled: true });
             });
         };
 
@@ -89,8 +92,8 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>
                 )}
-                {status === 'GAME' && <Cards words={words} onFinish={handleFinish} />}
-                {curtain && <div className={cn('curtain')}></div>}
+                {status === 'GAME' && <Cards gameUid={gameUid} words={words} onFinish={handleFinish} />}
+                {disabled && <Curtain />}
             </div>
         );
     } else if (!loaded) {
