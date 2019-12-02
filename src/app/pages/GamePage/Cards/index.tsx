@@ -65,7 +65,6 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
     }, [windowDimensions]);
 
     useEffect(() => {
-
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             setTimeout(() => {
                 handleRelease(index);

@@ -15,7 +15,7 @@ export const getMotionStyle = (status: TMotionStatus, x: number, y: number): Sty
             x: x,
             y: y,
         };
-    } else if (status === 'CANCEL' || 'STOP') {
+    } else if (status === 'CANCEL' || status === 'STOP') {
         style = {
             scale: spring(1, { stiffness: 400, damping: 10, precision: 10 }),
             shadow: spring(1, defaultConfig),
