@@ -1,11 +1,11 @@
-import { IResultData, TResult } from 'als-data-types/result';
+import { IResultData, TGuessWords } from 'als-data-types/result';
 import { getRandomString } from 'als-services/utils';
 
 export class Result {
     uid: string;
     gameUid: string;
     dateTime: number;
-    results: TResult[];
+    guesses: TGuessWords[];
 
     constructor(gameUid: string);
     constructor(uid: string, data: IResultData);
@@ -14,12 +14,12 @@ export class Result {
             this.uid = gameUidOrUid;
             this.gameUid = data.gameUid;
             this.dateTime = data.dateTime || Date.now();
-            this.results = data.results;
+            this.guesses = data.guesses;
         } else {
             this.uid = getRandomString();
             this.gameUid = gameUidOrUid;
             this.dateTime = Date.now();
-            this.results = [];
+            this.guesses = [];
         }
     }
 
@@ -27,19 +27,19 @@ export class Result {
         return {
             gameUid: this.gameUid,
             dateTime: this.dateTime,
-            results: this.results,
+            guesses: this.guesses,
         };
     }
 
-    add(result: TResult) {
-        this.results.push(result);
+    add(guess: TGuessWords) {
+        this.guesses.push(guess);
     }
 
-    get(): TResult[] {
-        return this.results;
+    getGuesses(): TGuessWords[] {
+        return this.guesses;
     }
 
     getPoints(): number {
-        return this.results.reduce((a, result) => a + (result.guess ? 1 : -1), 0);
+        return this.guesses.reduce((a, guess) => a + (guess.guess ? 1 : -1), 0);
     }
 }

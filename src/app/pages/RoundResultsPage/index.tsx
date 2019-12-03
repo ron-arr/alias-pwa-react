@@ -9,7 +9,7 @@ import { gameRepo, resultRepo } from 'als-db-manager';
 import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
-import { TResult } from 'als-data-types/result';
+import { TGuessWords } from 'als-data-types/result';
 
 interface IRouterProps {
     resultUid: string;
@@ -50,9 +50,9 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         const handleContinue = () => {
             history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
         };
-        const handleGuess = (result: TResult) => {
+        const handleGuess = (guess: TGuessWords) => {
             return (value: boolean) => {
-                result.guess = value;
+                guess.guess = value;
             };
         };
         return (
@@ -63,12 +63,12 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
                         <div className={cn('col', { head: true })}>Слово</div>
                         <div className={cn('col', { head: true })}>Отгадано</div>
                     </div>
-                    {result.get().map((result, index) => {
+                    {result.getGuesses().map((guess, index) => {
                         return (
                             <div key={index} className={cn('row')}>
-                                <div className={cn('col')}>{result.word}</div>
+                                <div className={cn('col')}>{guess.word}</div>
                                 <div className={cn('col')}>
-                                    <CheckFlip value={result.guess} onChange={handleGuess(result)} />
+                                    <CheckFlip value={guess.guess} onChange={handleGuess(guess)} />
                                 </div>
                             </div>
                         );
