@@ -14,6 +14,7 @@ export const CheckFlip: React.FC<IProps> = ({ value, onChange }) => {
     const id = `check-flip-${Date.now()}`;
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setChecked(event.target.checked);
+        onChange(event.target.checked);
     };
     return (
         <>

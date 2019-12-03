@@ -30,6 +30,12 @@ const scssRule = {
             },
         },
         {
+            loader: 'postcss-loader',
+            options: {
+                sourceMap: true,
+            },
+        },
+        {
             loader: 'sass-loader',
             options: {
                 sassOptions: {
