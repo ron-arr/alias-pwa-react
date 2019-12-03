@@ -34,6 +34,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
         gameRepo
             .get(gameUid)
             .then(game => {
+                game.teams = [];
                 setState({ ...state, game, loaded: true });
             })
             .catch(() => {

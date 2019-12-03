@@ -8,6 +8,7 @@ module.exports = {
     'als-data-types': resolve('src', 'app', 'dataTypes'),
     'als-ui': resolve('src', 'app', 'ui'),
     'als-routes': resolve('src', 'app', 'routes'),
+    'als-hooks': resolve('src', 'app', 'hooks'),
     'als-services': resolve('src', 'services'),
     'als-icons': resolve('src', 'jsxIcons'),
     'als-db-manager': resolve('src', 'dbManager'),

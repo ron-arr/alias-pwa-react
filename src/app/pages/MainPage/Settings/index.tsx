@@ -9,7 +9,7 @@ import { TLevel, TRoundTime } from 'als-data-types/game';
 const TEAM_BASE_TITLE = 'Количество команд';
 const LEVEL_BASE_TITLE = 'Уровень';
 const ROUND_DUR_BASE_TITLE = 'Время раунда';
-const POINT_COUNTS_TITLE = 'Количество очков для победы';
+const POINT_COUNTS_TITLE = 'Количество очков';
 
 const cn = classNameBuilder('game-settings');
 

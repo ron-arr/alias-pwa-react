@@ -37,7 +37,11 @@
 
     &__btn {
         width: 90%;
-        position: sticky;
+        position: absolute;
         bottom: 20px;
+    }
+
+    &__no-result {
+        margin: 45% auto;
     }
 }

@@ -8,9 +8,21 @@
     width: 100%;
     height: 100%;
     overflow: hidden;
+    transition: background 0.3s;
 
     &--drag {
-        background: radial-gradient(ellipse at center, #eee 60%, #aaa);
+        background: #ece4ff;
+        transition: background 1.5s;
+    }
+
+    &--drag-up {
+        background: rgba(green, 0.5);
+        transition: background 0.5s;
+    }
+
+    &--drag-down {
+        background: rgba(red, 0.5);
+        transition: background 0.5s;
     }
 
     &__wrapper {
@@ -25,11 +37,11 @@
         top: 0;
         left: 0;
         width: 100%;
-        height: 40%;
+        height: 35%;
 
-        #{$component}--drag-up & {
-            background: linear-gradient(to top, transparent, rgba(132, 240, 118, 0.404));
-        }
+        // #{$component}--drag-up & {
+        //     background: linear-gradient(to top, transparent, rgba(green, 0.5));
+        // }
     }
 
     &__skip {
@@ -38,14 +50,14 @@
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 40%;
+        height: 35%;
         display: flex;
         align-items: flex-end;
         background: transparent;
 
-        #{$component}--drag-down & {
-            background: linear-gradient(to bottom, transparent, rgba(173, 66, 80, 0.253));
-        }
+        // #{$component}--drag-down & {
+        //     background: linear-gradient(to bottom, transparent, rgba(red, 0.5));
+        // }
     }
 
     &__btn-title {
@@ -63,10 +75,12 @@
 
         &--accept {
             color: green;
+            text-shadow: 0px 0px 20px green;
         }
 
         &--skip {
             color: red;
+            text-shadow: 0px 0px 20px red;
         }
 
         #{$component}--drag & {

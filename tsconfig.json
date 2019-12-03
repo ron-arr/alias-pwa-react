@@ -17,13 +17,14 @@
             "als-pages/*": ["./src/app/pages/*"],
             "als-components/*": ["./src/app/components/*"],
             "als-models": ["./src/app/models/index.ts"],
-            "als-data-types/*": ["src/app/dataTypes/*"],
+            "als-data-types/*": ["./src/app/dataTypes/*"],
             "als-ui": ["./src/app/ui/index.ts"],
             "als-ui/*": ["./src/app/ui/*"],
             "als-routes/*": ["./src/app/routes/*"],
             "als-services": ["./src/services/index.ts"],
+            "als-hooks": ["./src/app/hooks/index.ts"],
             "als-services/*": ["./src/services/*"],
-            "als-icons/*": ["src/jsxIcons/*"],
+            "als-icons/*": ["./src/jsxIcons/*"],
             "styles/*": ["./src/assets/styles/*"],
             "als-db-manager": ["src/dbManager/index.ts"]
         }

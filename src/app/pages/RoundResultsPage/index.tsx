@@ -10,6 +10,7 @@ import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
 import { TGuessWords } from 'als-data-types/result';
+import { NoResult } from 'als-icons/otherIcons';
 
 interface IRouterProps {
     resultUid: string;
@@ -58,22 +59,28 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         return (
             <div className={cn()}>
                 <Header title={'Результат'} />
-                <div className={cn('table')}>
-                    <div className={cn('row')}>
-                        <div className={cn('col', { head: true })}>Слово</div>
-                        <div className={cn('col', { head: true })}>Отгадано</div>
-                    </div>
-                    {result.getGuesses().map((guess, index) => {
-                        return (
-                            <div key={index} className={cn('row')}>
-                                <div className={cn('col')}>{guess.word}</div>
-                                <div className={cn('col')}>
-                                    <CheckFlip value={guess.guess} onChange={handleGuess(guess)} />
+                {result.hasGuesses() ? (
+                    <div className={cn('table')}>
+                        <div className={cn('row')}>
+                            <div className={cn('col', { head: true })}>Слово</div>
+                            <div className={cn('col', { head: true })}>Отгадано</div>
+                        </div>
+                        {result.getGuesses().map((guess, index) => {
+                            return (
+                                <div key={index} className={cn('row')}>
+                                    <div className={cn('col')}>{guess.word}</div>
+                                    <div className={cn('col')}>
+                                        <CheckFlip value={guess.guess} onChange={handleGuess(guess)} />
+                                    </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                </div>
+                            );
+                        })}
+                    </div>
+                ) : (
+                    <div className={cn('no-result')}>
+                        <NoResult width={150} height={150} />
+                    </div>
+                )}
                 <Button className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleContinue} />
             </div>
         );

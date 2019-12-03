@@ -5,10 +5,12 @@ import { Motion } from 'react-motion';
 import { Timer } from './Timer';
 import { TMotionStatus, getMotionStyle } from './motionStyles';
 import { Result } from 'als-models';
+import { useTopBottomBounds } from 'als-hooks';
 
 interface IProps {
     gameUid: string;
     words: string[];
+    time: number;
     onFinish: (result: Result) => void;
 }
 
@@ -16,27 +18,14 @@ interface IState {
     result: Result;
     mouseY: number;
     mouseX: number;
-    topDeltaY: number; 
+    topDeltaY: number;
     leftDeltaX: number;
     index: number;
-    topBound: number;
-    bottomBound: number;
     motionStatus: TMotionStatus;
 }
 const cn = classNameBuilder('cards');
 
-const getWindowDimensions = () => {
-    const { innerWidth: width, innerHeight: height } = window;
-    return {
-        width,
-        height,
-    };
-};
-
-const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
-    const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
-    const acceptRef = useRef<HTMLDivElement>(null);
-    const skipRef = useRef<HTMLDivElement>(null);
+const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => {
     const [state, setState] = useState<IState>({
         result: new Result(gameUid),
         mouseY: 0,
@@ -44,25 +33,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
         topDeltaY: 0,
         leftDeltaX: 0,
         index: 0,
-        motionStatus: 'CANCEL',
-        topBound: windowDimensions.height / 2,
-        bottomBound: windowDimensions.height / 2,
+        motionStatus: 'ROLLBACK',
     });
-    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, topBound, bottomBound, result } = state;
-
-    useLayoutEffect(() => {
-        if (acceptRef.current && skipRef.current) {
-            const { height } = acceptRef.current.getBoundingClientRect();
-            const { top } = skipRef.current.getBoundingClientRect();
-            setState({ ...state, topBound: height, bottomBound: top });
-        }
-        function handleResize() {
-            setWindowDimensions(getWindowDimensions());
-        }
-
-        window.addEventListener('resize', handleResize);
-        return () => window.removeEventListener('resize', handleResize);
-    }, [windowDimensions]);
+    const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, result } = state;
+    const acceptRef = useRef<HTMLDivElement>(null);
+    const skipRef = useRef<HTMLDivElement>(null);
+    const { top, bottom } = useTopBottomBounds(acceptRef, skipRef);
 
     useEffect(() => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
@@ -75,28 +51,62 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
         }
     }, [motionStatus]);
 
+    const handleDrag = useCallback(
+        (pressX: number, pressY: number, pageX: number, pageY: number) => {
+            if (motionStatus === 'ROLLBACK') {
+                setState(prevState => {
+                    if (prevState.motionStatus !== 'STOP') {
+                        return {
+                            ...state,
+                            topDeltaY: pageY - pressY,
+                            leftDeltaX: pageX - pressX,
+                            mouseY: pressY,
+                            mouseX: pressX,
+                            motionStatus: 'DRAG',
+                        };
+                    }
+                    return prevState;
+                });
+            }
+        },
+        [motionStatus]
+    );
+
+    const handleMouseDown = (pressY: number, pressX: number, { pageY, pageX }: React.MouseEvent) => {
+        handleDrag(pressX, pressY, pageX, pageY);
+    };
+    const handleTouchStart = (pressY: number, pressX: number, { touches }: React.TouchEvent<HTMLDivElement>) => {
+        const { pageY, pageX } = touches[0];
+        handleDrag(pressX, pressY, pageX, pageY);
+    };
+
     const handleTouchMove = (event: React.TouchEvent) => {
         event.preventDefault();
         handleMove(event.touches[0].pageY, event.touches[0].pageX);
     };
 
     const handleDrop = () => {
-        let newMotionStatus: TMotionStatus = 'CANCEL';
+        let newMotionStatus: TMotionStatus = 'ROLLBACK';
 
         if (mouseY < 0) {
-            if (topBound > topDeltaY + mouseY) {
+            if (top > topDeltaY + mouseY) {
                 newMotionStatus = 'ACCEPT';
             }
         }
         if (mouseY > 0) {
-            if (bottomBound < topDeltaY + mouseY) {
+            if (bottom < topDeltaY + mouseY) {
                 newMotionStatus = 'SKIP';
             }
         }
-        setState({
-            ...state,
-            motionStatus: newMotionStatus,
-            topDeltaY: 0,
+        setState(prevState => {
+            if (prevState.motionStatus !== 'STOP') {
+                return {
+                    ...state,
+                    motionStatus: newMotionStatus,
+                    topDeltaY: 0,
+                };
+            }
+            return prevState;
         });
     };
     const handleMouseUp = ({ pageY, pageX }: React.MouseEvent) => {
@@ -120,45 +130,36 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
         handleMove(pageY, pageX);
     };
 
-    const handleAcceptSkip = (motionStatus: TMotionStatus) => {
-        setState({
-            ...state,
-            index: index + 1,
-            motionStatus,
-            mouseY: Number(motionStatus === 'SKIP'),
-        });
-    };
+    const handleAcceptSkip = useCallback(
+        (_motionStatus: TMotionStatus) => {
+            if (motionStatus === 'ROLLBACK') {
+                setState({
+                    ...state,
+                    motionStatus: _motionStatus,
+                    mouseY: Number(_motionStatus === 'SKIP'),
+                });
+            }
+        },
+        [motionStatus]
+    );
 
-    const handleDrag = (pressX: number, pressY: number, pageX: number, pageY: number) => {
-        setState({
-            ...state,
-            topDeltaY: pageY - pressY,
-            leftDeltaX: pageX - pressX,
-            mouseY: pressY,
-            mouseX: pressX,
-            motionStatus: motionStatus !== 'STOP' ? 'DRAG' : motionStatus,
-        });
-    };
-    const handleMouseDown = (pressY: number, pressX: number, { pageY, pageX }: React.MouseEvent) => {
-        handleDrag(pressX, pressY, pageX, pageY);
-    };
-    const handleTouchStart = (pressY: number, pressX: number, { touches }: React.TouchEvent<HTMLDivElement>) => {
-        const { pageY, pageX } = touches[0];
-        handleDrag(pressX, pressY, pageX, pageY);
-    };
-
-    const handleRelease = (index: number) => {
+    const handleRelease = (_index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             result.add({
                 guess: motionStatus === 'ACCEPT',
-                word: words[index],
+                word: words[_index],
             });
-            setState({ ...state, motionStatus: 'CANCEL', index: index + 1, result });
+            setState(prevState => {
+                if (prevState.motionStatus !== 'STOP') {
+                    return { ...state, motionStatus: 'ROLLBACK', index: _index + 1, result };
+                }
+                return prevState;
+            });
         }
     };
 
     const handleAlert = useCallback(() => {
-        setState({ ...state, motionStatus: 'STOP' });
+        setState(prevState => ({ ...prevState, motionStatus: 'STOP' }));
     }, []);
 
     const word = words[index];
@@ -168,25 +169,29 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
         <div
             className={cn('', {
                 drag: motionStatus === 'DRAG',
-                'drag-up': motionStatus === 'DRAG' && topBound > mouseY + topDeltaY,
-                'drag-down': motionStatus === 'DRAG' && bottomBound < mouseY + topDeltaY,
+                'drag-up': motionStatus === 'DRAG' && top > mouseY + topDeltaY,
+                'drag-down': motionStatus === 'DRAG' && bottom < mouseY + topDeltaY,
             })}
             onMouseMove={handleMouseMove}
             onTouchMove={handleTouchMove}
             onMouseUp={handleMouseUp}
         >
-            <div className={cn('accept')} ref={acceptRef}>
-                <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip('ACCEPT')}>
-                    Верно
-                </button>
-            </div>
-            <div className={cn('skip')} ref={skipRef}>
-                <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip('SKIP')}>
-                    Пропустить
-                </button>
-            </div>
+            {motionStatus !== 'STOP' && (
+                <>
+                    <div className={cn('accept')} ref={acceptRef}>
+                        <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip('ACCEPT')}>
+                            Верно
+                        </button>
+                    </div>
+                    <div className={cn('skip')} ref={skipRef}>
+                        <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip('SKIP')}>
+                            Пропустить
+                        </button>
+                    </div>
+                </>
+            )}
             <div className={cn('wrapper')}>
-                <Timer className={cn('timer')} totalSeconds={6} msStartAt={5} onAlert={handleAlert} />
+                <Timer className={cn('timer')} totalSeconds={time} msStartAt={10} onAlert={handleAlert} />
                 <Motion style={style}>
                     {({ scale, shadow, opacity, x, y }) => (
                         <div
@@ -210,6 +215,5 @@ const Cards: React.FC<IProps> = ({ gameUid, words, onFinish }: IProps) => {
     );
 };
 
-
 const memoCards = memo(Cards);
-export {memoCards as Cards};
+export { memoCards as Cards };

@@ -31,6 +31,10 @@ export class Result {
         };
     }
 
+    hasGuesses(): boolean {
+        return this.guesses.length > 0;
+    }
+
     add(guess: TGuessWords) {
         this.guesses.push(guess);
     }

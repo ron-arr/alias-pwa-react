@@ -81,7 +81,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                             gameData: game.toJson(),
                             resultData: result.toJson(),
                         });
-                    }, 3000);
+                    }, 1500);
                     setState({ ...state, status: 'GAME', disabled: true });
                 });
             },
@@ -96,7 +96,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>
                 )}
-                {status === 'GAME' && words && <Cards gameUid={gameUid} words={words} onFinish={handleFinish} />}
+                {status === 'GAME' && words && <Cards gameUid={gameUid} words={words} onFinish={handleFinish} time={game.roundTime} />}
                 {disabled && <Curtain />}
             </div>
         );
