@@ -4,14 +4,32 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    overflow-y: auto;
     pointer-events: auto;
+
+    &__stats-title {
+        margin: 12px 0;
+        font-size: 1.2em;
+        text-shadow: 0px 3px 8px gray;
+    }
+
+    &__stats {
+        font-weight: bold;
+
+        &--accepted {
+            color: green;
+        }
+
+        &--skipped {
+            color: red;
+        }
+    }
 
     &__table {
         padding: 20px 30px;
         max-width: 350px;
         width: 100%;
         margin-bottom: 40px;
+        overflow-y: auto;
     }
 
     &__row {

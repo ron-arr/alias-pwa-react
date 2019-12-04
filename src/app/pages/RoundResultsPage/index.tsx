@@ -9,7 +9,6 @@ import { gameRepo, resultRepo } from 'als-db-manager';
 import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
-import { TGuessWords } from 'als-data-types/result';
 import { NoResult } from 'als-icons/otherIcons';
 
 interface IRouterProps {
@@ -51,14 +50,20 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         const handleContinue = () => {
             history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
         };
-        const handleGuess = (guess: TGuessWords) => {
+        const handleGuess = (index: number) => {
             return (value: boolean) => {
-                guess.guess = value;
+                result.guesses[index].guess = value;
+                setState({ ...state, result });
             };
         };
+        const { accepted, skipped } = result.getStats();
         return (
             <div className={cn()}>
                 <Header title={'Результат'} />
+                <div className={cn('stats-title')}>
+                    Статистика <span className={cn('stats', { accepted: true })}>{accepted} </span> /{' '}
+                    <span className={cn('stats', { skipped: true })}>{skipped}</span>
+                </div>
                 {result.hasGuesses() ? (
                     <div className={cn('table')}>
                         <div className={cn('row')}>
@@ -70,7 +75,7 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
                                 <div key={index} className={cn('row')}>
                                     <div className={cn('col')}>{guess.word}</div>
                                     <div className={cn('col')}>
-                                        <CheckFlip value={guess.guess} onChange={handleGuess(guess)} />
+                                        <CheckFlip id={index} value={guess.guess} onChange={handleGuess(index)} />
                                     </div>
                                 </div>
                             );

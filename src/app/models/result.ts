@@ -31,6 +31,20 @@ export class Result {
         };
     }
 
+    getStats(): { accepted: number; skipped: number } {
+        return this.guesses.reduce(
+            (acc, val) => {
+                if (val.guess) {
+                    acc.accepted += 1;
+                } else {
+                    acc.skipped += 1;
+                }
+                return acc;
+            },
+            { accepted: 0, skipped: 0 }
+        );
+    }
+
     hasGuesses(): boolean {
         return this.guesses.length > 0;
     }
