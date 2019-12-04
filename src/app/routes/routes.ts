@@ -1,11 +1,5 @@
-import * as React from 'react';
+import React from 'react';
 import { MainPage } from 'als-pages/MainPage';
-import { GamePage } from 'als-pages/GamePage';
-import { SelectTeamPage } from 'als-pages/SelectTeamPage';
-import { TeamsPage } from 'als-pages/TeamsPage';
-import { WordsPage } from 'als-pages/WordsPage';
-import { RoundResultsPage } from 'als-pages/RoundResultsPage';
-import { Loader } from 'als-components/Loader';
 
 interface IRoute {
     path: string;
@@ -19,27 +13,27 @@ const routes: IRoute[] = [
     },
     {
         path: '/select-teams/:gameUid',
-        component: SelectTeamPage,
+        component: React.lazy(() => import('als-pages/SelectTeamPage').then(module => ({ default: module.SelectTeamPage }))),
     },
     {
         path: '/teams/:gameUid',
-        component: TeamsPage,
+        component: React.lazy(() => import('als-pages/TeamsPage').then(module => ({ default: module.TeamsPage }))),
     },
     {
         path: '/results/:resultUid',
-        component: RoundResultsPage,
+        component: React.lazy(() => import('als-pages/RoundResultsPage').then(module => ({ default: module.RoundResultsPage }))),
     },
     {
         path: '/game/:gameUid',
-        component: GamePage,
+        component: React.lazy(() => import('als-pages/GamePage').then(module => ({ default: module.GamePage }))),
     },
     {
         path: '/words',
-        component: WordsPage,
+        component: React.lazy(() => import('als-pages/WordsPage').then(module => ({ default: module.WordsPage }))),
     },
     {
         path: '/loading',
-        component: Loader,
+        component: React.lazy(() => import('als-components/Loader').then(module => ({ default: module.Loader }))),
     },
 ];
 

@@ -9,7 +9,6 @@ import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
 import { Button } from 'als-ui/controls';
 import { Cards } from './Cards';
-import { easy as easyWords, hard as hardWords, norm as normWords } from 'alias-words';
 import { shuffle } from 'als-services/utils';
 import { Curtain } from 'als-components/Curtain';
 
@@ -23,6 +22,7 @@ interface IState {
     disabled: boolean;
     game: null | Game;
     status: TStatus;
+    words: string[];
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
@@ -36,22 +36,22 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         disabled: false,
         game: gameData ? new Game(gameUid, gameData) : null,
         status: 'TEAM',
+        words: [],
     });
-    const { game, loaded, status, disabled } = state;
-    let words = useMemo(() => {
-        let _words;
-        if (game) {
+    const { game, loaded, status, disabled, words } = state;
+    if (game && !words.length) {
+        import('alias-words').then(module => {
+            let _words;
             if (game.level === 3) {
-                _words = hardWords;
+                _words = module.hard;
             } else if (game.level === 2) {
-                _words = normWords;
+                _words = module.hard;
             } else {
-                _words = easyWords;
+                _words = module.hard;
             }
-            _words = shuffle(_words);
-        }
-        return _words;
-    }, [game]);
+            setState({ ...state, words: shuffle(_words) });
+        });
+    }
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
@@ -62,12 +62,9 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                 setState({ ...state, loaded: true });
             });
     }
-    if (game && game.currentTeam) {
-        const handleStart = () => {
-            setState({ ...state, status: 'GAME' });
-        };
-        const handleFinish = useCallback(
-            (result: Result) => {
+    const handleFinish = useCallback(
+        (result: Result) => {
+            if (game) {
                 const points = result.getPoints();
                 game.setPointsForCurrentTeam(points);
 
@@ -84,9 +81,15 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                     }, 1500);
                     setState({ ...state, status: 'GAME', disabled: true });
                 });
-            },
-            [game]
-        );
+            }
+        },
+        [game]
+    );
+
+    if (game && game.currentTeam) {
+        const handleStart = () => {
+            setState({ ...state, status: 'GAME' });
+        };
         return (
             <div className={cn()}>
                 {status === 'TEAM' && (

@@ -1,5 +1,5 @@
 import './style.scss';
-import * as React from 'react';
+import  React from 'react';
 import { classNameBuilder } from 'als-services/className';
 
 type TButtonType = 'primary' | 'secondary';

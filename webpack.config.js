@@ -50,7 +50,8 @@ module.exports = [
     {
         entry: { app: './src/app/index.tsx' },
         output: {
-            filename: 'assets/[name].js',
+            filename: 'assets/[name].bundle.js',
+            chunkFilename: 'assets/[name].bundle.[hash].js',
             path: path.join(__dirname, 'public'),
             publicPath: '/',
         },
