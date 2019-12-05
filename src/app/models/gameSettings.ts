@@ -54,6 +54,7 @@ export class GameSettings {
     static getRoundTimes(): { title: string; value: TRoundTime }[] {
         return [
             { title: '30 сек', value: 30 },
+            { title: '45 сек', value: 45 },
             { title: '1 мин', value: 60 },
             { title: '1 мин 30 сек', value: 90 },
             { title: '2 мин', value: 120 },
