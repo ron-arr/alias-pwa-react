@@ -26,11 +26,11 @@ export const getMotionStyle = (status: TMotionStatus, x: number, y: number): Sty
     } else if (status === 'ACCEPT' || status === 'SKIP') {
         y = y > 0 ? y + 300 : y - 300;
         style = {
-            scale: spring(0.2, { stiffness: 400, damping: 50, precision: 0.1 }),
-            opacity: spring(0, { stiffness: 400, damping: 30, precision: 0.1 }),
+            scale: spring(0.2, { stiffness: 600, damping: 50, precision: 0.1 }),
+            opacity: spring(0, { stiffness: 200, damping: 30, precision: 0.1 }),
             shadow: spring(2, defaultConfig),
-            x: spring(x, defaultConfig),
-            y: spring(y, defaultConfig),
+            x: spring(x, { stiffness: 400, damping: 50, precision: 0.1 }),
+            y: spring(y, { stiffness: 400, damping: 50, precision: 0.1 }),
         };
     }
     return style;

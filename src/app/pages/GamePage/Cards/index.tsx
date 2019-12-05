@@ -38,7 +38,8 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
     const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, result } = state;
     const acceptRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
-    const { top, bottom } = useTopBottomBounds(acceptRef, skipRef);
+    const cardRef = useRef<HTMLDivElement>(null);
+    const [{ top, bottom }, cardBounds] = useTopBottomBounds(cardRef, acceptRef, skipRef);
 
     useEffect(() => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
@@ -94,12 +95,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         let newMotionStatus: TMotionStatus = 'ROLLBACK';
 
         if (mouseY < 0) {
-            if (top > topDeltaY + mouseY) {
+            if (top > mouseY + cardBounds.top) {
                 newMotionStatus = 'ACCEPT';
             }
         }
         if (mouseY > 0) {
-            if (bottom < topDeltaY + mouseY) {
+            if (bottom < mouseY + cardBounds.bottom) {
                 newMotionStatus = 'SKIP';
             }
         }
@@ -169,13 +170,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
 
     const word = words[index] || '';
     const style = getMotionStyle(motionStatus, mouseX, mouseY);
-
     return (
         <div
             className={cn('', {
                 drag: motionStatus === 'DRAG',
-                'drag-up': motionStatus === 'DRAG' && top > mouseY + topDeltaY,
-                'drag-down': motionStatus === 'DRAG' && bottom < mouseY + topDeltaY,
+                'drag-up': motionStatus === 'DRAG' && top > mouseY + cardBounds.top,
+                'drag-down': motionStatus === 'DRAG' && bottom < mouseY + cardBounds.bottom,
             })}
             onMouseMove={handleMouseMove}
             onTouchMove={handleTouchMove}
@@ -200,6 +200,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
                 <Motion style={style}>
                     {({ scale, shadow, opacity, x, y }) => (
                         <div
+                            ref={cardRef}
                             onMouseDown={handleMouseDown.bind(null, y, x)}
                             onTouchStart={handleTouchStart.bind(null, y, x)}
                             onTouchEnd={handleTouchUp}
