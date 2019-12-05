@@ -41,8 +41,17 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
 
     if (game) {
         const handleContinue = () => {
-            history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
+            if (game.isRoundPlayed()) {
+                game.round += 1;
+            }
+            gameRepo.save(game).then(() => {
+                history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
+            });
         };
+        const handleGameOver = () => {
+            history.replace('/');
+        };
+        const winner = game.winner;
         return (
             <div className={cn()}>
                 <Header title={'Команды'} />
@@ -52,7 +61,7 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                         <div className={cn('col', { head: true })}>Команда</div>
                         <div className={cn('col', { head: true })}>Очки</div>
                     </div>
-                    {game.teams.map(team => {
+                    {game.getSortedTeams().map(team => {
                         const TeamIcon = teamIcons[team.id];
                         return (
                             <div key={team.id} className={cn('row')}>
@@ -66,7 +75,11 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                     })}
                 </div>
                 <div className={cn('btn')}>
-                    <Button text={'Продолжить'} type="secondary" onAction={handleContinue} />
+                    {winner ? (
+                        <Button text={'Закончить'} type="secondary" onAction={handleGameOver} />
+                    ) : (
+                        <Button text={'Продолжить'} type="secondary" onAction={handleContinue} />
+                    )}
                 </div>
             </div>
         );

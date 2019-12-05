@@ -23,6 +23,14 @@ export class Result {
         }
     }
 
+    get lastGuess(): TGuessWords {
+        return this.guesses[this.guesses.length - 1];
+    }
+
+    set lastGuess(guess: TGuessWords) {
+        this.guesses[this.guesses.length - 1] = guess;
+    }
+
     toJson(): IResultData {
         return {
             gameUid: this.gameUid,
@@ -34,9 +42,9 @@ export class Result {
     getStats(): { accepted: number; skipped: number } {
         return this.guesses.reduce(
             (acc, val) => {
-                if (val.guess) {
+                if (val.status === 'ACCEPTED') {
                     acc.accepted += 1;
-                } else {
+                } else if (val.status === 'SKIPPED') {
                     acc.skipped += 1;
                 }
                 return acc;
@@ -45,19 +53,20 @@ export class Result {
         );
     }
 
-    hasGuesses(): boolean {
-        return this.guesses.length > 0;
-    }
-
     add(guess: TGuessWords) {
         this.guesses.push(guess);
     }
 
+    hasGuessed(): boolean {
+        return this.guesses.some(guess => guess.status === 'ACCEPTED');
+    }
+
     getGuesses(): TGuessWords[] {
-        return this.guesses;
+        return this.guesses.slice(0, this.guesses.length - 1);
     }
 
     getPoints(): number {
-        return this.guesses.reduce((a, guess) => a + (guess.guess ? 1 : -1), 0);
+        const { accepted, skipped } = this.getStats();
+        return accepted - skipped;
     }
 }

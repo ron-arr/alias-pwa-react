@@ -1,5 +1,5 @@
 export type TGuessWords = {
-    guess: boolean;
+    status: 'SKIPPED' | 'ACCEPTED' | 'LAST';
     word: string;
 };
 

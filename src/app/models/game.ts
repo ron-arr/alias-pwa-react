@@ -42,6 +42,17 @@ export class Game {
         return team || null;
     }
 
+    get winner(): Team | null {
+        if (this.teams.every(team => team.lastRound === this.round)) {
+            return this.getSortedTeams().find(team => team.points >= this.pointCounts) || null;
+        }
+        return null;
+    }
+
+    getSortedTeams(): Team[] {
+        return this.teams.sort((a, b) => (a.points < b.points ? 1 : -1));
+    }
+
     setPointsForCurrentTeam(points: number): void {
         if (this.currentTeam) {
             this.currentTeam.points += points;

@@ -10,6 +10,7 @@ import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
 import { NoResult } from 'als-icons/otherIcons';
+import { teamIcons } from 'als-ui/icons';
 
 interface IRouterProps {
     resultUid: string;
@@ -46,46 +47,67 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
             });
     }
 
-    if (game && result) {
+    if (game && result && game.currentTeam) {
         const handleContinue = () => {
-            history.replace(`/game/${game.uid}`, { gameData: game.toJson() });
+            const points = result.getPoints();
+            game.setPointsForCurrentTeam(points);
+            const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
+            saveReqs.then(() => {
+                history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
+            });
         };
         const handleGuess = (index: number) => {
             return (value: boolean) => {
-                result.guesses[index].guess = value;
+                result.guesses[index].status = value ? 'ACCEPTED' : 'SKIPPED';
                 setState({ ...state, result });
             };
         };
-        const { accepted, skipped } = result.getStats();
+
+        const handleLastGuess = (value: boolean) => {
+            const guess = result.lastGuess;
+            guess.status = value ? 'ACCEPTED' : 'LAST';
+            result.lastGuess = guess;
+            setState({ ...state, result });
+        };
+
+        const points = result.getPoints();
         return (
             <div className={cn()}>
-                <Header title={'Результат'} />
+                <Header title={'Результат'} teamIcon={teamIcons[game.currentTeam.id]} />
                 <div className={cn('stats-title')}>
-                    Статистика <span className={cn('stats', { accepted: true })}>{accepted} </span> /{' '}
-                    <span className={cn('stats', { skipped: true })}>{skipped}</span>
+                    Количество очков:
+                    <span className={cn('stats', { pos: points > 0, neg: points < 0 })}>{points}</span>
                 </div>
-                {result.hasGuesses() ? (
-                    <div className={cn('table')}>
-                        <div className={cn('row')}>
-                            <div className={cn('col', { head: true })}>Слово</div>
-                            <div className={cn('col', { head: true })}>Отгадано</div>
-                        </div>
-                        {result.getGuesses().map((guess, index) => {
-                            return (
-                                <div key={index} className={cn('row')}>
-                                    <div className={cn('col')}>{guess.word}</div>
-                                    <div className={cn('col')}>
-                                        <CheckFlip id={index} value={guess.guess} onChange={handleGuess(index)} />
-                                    </div>
-                                </div>
-                            );
-                        })}
+                <div className={cn('table')}>
+                    <div className={cn('row')}>
+                        <div className={cn('col', { head: true })}>Слово</div>
+                        <div className={cn('col', { head: true })}>Отгадано</div>
                     </div>
-                ) : (
-                    <div className={cn('no-result')}>
+                    {result.getGuesses().map((guess, index) => {
+                        return (
+                            <div key={index} className={cn('row')}>
+                                <div className={cn('col')}>{guess.word}</div>
+                                <div className={cn('col')}>
+                                    <CheckFlip id={index} value={guess.status === 'ACCEPTED'} onChange={handleGuess(index)} />
+                                </div>
+                            </div>
+                        );
+                    })}
+                    <div className={cn('row')}>
+                        <div className={cn('col')}>{result.lastGuess.word}</div>
+                        <div className={cn('col')}>
+                            <CheckFlip
+                                id={result.guesses.length}
+                                value={result.lastGuess.status === 'ACCEPTED'}
+                                onChange={handleLastGuess}
+                            />
+                        </div>
+                    </div>
+
+                    <div className={cn('no-points', { visible: !result.hasGuessed() })}>
                         <NoResult width={150} height={150} />
                     </div>
-                )}
+                </div>
                 <Button className={cn('btn')} text={'Продолжить'} type="secondary" onAction={handleContinue} />
             </div>
         );

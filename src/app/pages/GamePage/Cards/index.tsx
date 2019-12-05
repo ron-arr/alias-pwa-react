@@ -46,7 +46,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
                 handleRelease(index);
             }, 300);
         }
-        if (motionStatus == 'STOP') {
+        if (motionStatus === 'STOP') {
+            // Остановка игры
+            result.add({
+                status: 'LAST',
+                word: words[index],
+            });
             onFinish(result);
         }
     }, [motionStatus]);
@@ -101,7 +106,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         setState(prevState => {
             if (prevState.motionStatus !== 'STOP') {
                 return {
-                    ...state,
+                    ...prevState,
                     motionStatus: newMotionStatus,
                     topDeltaY: 0,
                 };
@@ -146,12 +151,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
     const handleRelease = (_index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             result.add({
-                guess: motionStatus === 'ACCEPT',
+                status: motionStatus === 'ACCEPT' ? 'ACCEPTED' : 'SKIPPED',
                 word: words[_index],
             });
             setState(prevState => {
                 if (prevState.motionStatus !== 'STOP') {
-                    return { ...state, motionStatus: 'ROLLBACK', index: _index + 1, result };
+                    return { ...prevState, motionStatus: 'ROLLBACK', index: _index + 1, result };
                 }
                 return prevState;
             });
@@ -162,7 +167,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         setState(prevState => ({ ...prevState, motionStatus: 'STOP' }));
     }, []);
 
-    const word = words[index];
+    const word = words[index] || '';
     const style = getMotionStyle(motionStatus, mouseX, mouseY);
 
     return (

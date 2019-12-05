@@ -9,17 +9,16 @@
     &__stats-title {
         margin: 12px 0;
         font-size: 1.2em;
-        text-shadow: 0px 3px 8px gray;
     }
 
     &__stats {
-        font-weight: bold;
-
-        &--accepted {
+        margin-left: 12px;
+        font-weight: 600;
+        &--pos {
             color: green;
         }
 
-        &--skipped {
+        &--neg {
             color: red;
         }
     }
@@ -28,7 +27,7 @@
         padding: 20px 30px;
         max-width: 350px;
         width: 100%;
-        margin-bottom: 40px;
+        margin-bottom: 80px;
         overflow-y: auto;
     }
 
@@ -59,7 +58,18 @@
         bottom: 20px;
     }
 
-    &__no-result {
-        margin: 45% auto;
+    &__no-points {
+        align-content: center;
+        visibility: hidden;
+        opacity: 0;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+
+        &--visible {
+            visibility: visible;
+            opacity: 1;
+            transition: opacity 5s;
+        }
     }
 }

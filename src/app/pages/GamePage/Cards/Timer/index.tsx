@@ -51,7 +51,7 @@ const Timer: React.FunctionComponent<IProps> = ({ totalSeconds, msStartAt, class
     useInterval(() => {
         if (status === 'sec') {
             const updates = { ...state, seconds: seconds - 1 };
-            if (updates.seconds === msStartAt) {
+            if (updates.seconds <= msStartAt) {
                 updates.status = 'ms';
                 updates.delay = 100;
             }
@@ -65,7 +65,9 @@ const Timer: React.FunctionComponent<IProps> = ({ totalSeconds, msStartAt, class
                 updates.seconds -= 1;
                 updates.miliseconds = 0;
             }
-            if (updates.seconds === 0) {
+            if (updates.seconds < 0 && updates.miliseconds <= 0) {
+                updates.seconds = 0;
+                updates.miliseconds = 0;
                 updates.status = 'stop';
                 updates.delay = null;
             }
@@ -81,12 +83,14 @@ const Timer: React.FunctionComponent<IProps> = ({ totalSeconds, msStartAt, class
 
     const minutesDisplay = Math.floor(seconds / 60);
     const secondsDisplay = seconds - minutesDisplay * 60;
+    const isStop = status === 'stop' || status === 'sendAlert';
+    const isMs = status === 'ms' || isStop;
 
     return (
-        <div className={cn('', [className])}>
+        <div className={cn('', { last: isMs, blink: isStop }, [className])}>
             <div className={cn('hour')}>{minutesDisplay.toString()}</div>
             <div className={cn('seconds')}>{secondsDisplay > 9 ? secondsDisplay.toString() : `0${secondsDisplay}`}</div>
-            {status === 'ms' && <div className={cn('miliseconds')}>{miliseconds}</div>}
+            {isMs && <div className={cn('miliseconds')}>{miliseconds}</div>}
         </div>
     );
 };

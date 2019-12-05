@@ -45,9 +45,9 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
             if (game.level === 3) {
                 _words = module.hard;
             } else if (game.level === 2) {
-                _words = module.hard;
+                _words = module.norm;
             } else {
-                _words = module.hard;
+                _words = module.easy;
             }
             setState({ ...state, words: shuffle(_words) });
         });
@@ -65,12 +65,6 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
     const handleFinish = useCallback(
         (result: Result) => {
             if (game) {
-                const points = result.getPoints();
-                game.setPointsForCurrentTeam(points);
-
-                if (game.isRoundPlayed()) {
-                    game.round += 1;
-                }
                 const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
                 saveReqs.then(() => {
                     setTimeout(() => {
@@ -78,8 +72,8 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                             gameData: game.toJson(),
                             resultData: result.toJson(),
                         });
-                    }, 1500);
-                    setState({ ...state, status: 'GAME', disabled: true });
+                    }, 3000);
+                    setState(prevState => ({ ...prevState, status: 'GAME', disabled: true }));
                 });
             }
         },

@@ -1,7 +1,18 @@
 .timer {
     display: inline-flex;
     align-items: flex-end;
-    font-size: 24px;
+    font-size: 20px;
+    text-shadow: 0px 3px 3px gray;
+
+    &--last {
+        font-size: 28px;
+        color: tomato;
+        transition: color 10s, font-size 10s;
+    }
+
+    &--blink {
+        animation: blink-animation 0.5s steps(5, start) 3;
+    }
 
     &__hour {
         display: inline-flex;
@@ -22,5 +33,11 @@
         &::before {
             content: '.';
         }
+    }
+}
+
+@keyframes blink-animation {
+    to {
+        visibility: hidden;
     }
 }

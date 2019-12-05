@@ -75,12 +75,10 @@
 
         &--accept {
             color: green;
-            text-shadow: 0px 0px 20px green;
         }
 
         &--skip {
             color: red;
-            text-shadow: 0px 0px 20px red;
         }
 
         #{$component}--drag & {
