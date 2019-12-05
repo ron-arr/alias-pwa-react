@@ -65,6 +65,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
     const handleFinish = useCallback(
         (result: Result) => {
             if (game) {
+                result.round = game.round;
                 const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
                 saveReqs.then(() => {
                     setTimeout(() => {

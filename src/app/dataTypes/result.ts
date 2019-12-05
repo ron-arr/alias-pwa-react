@@ -7,4 +7,5 @@ export interface IResultData {
     gameUid: string;
     dateTime: number;
     guesses: TGuessWords[];
+    round: number;
 }

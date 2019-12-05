@@ -4,8 +4,11 @@ import { getRandomString } from 'als-services/utils';
 export class Result {
     uid: string;
     gameUid: string;
-    dateTime: number;
     guesses: TGuessWords[];
+
+    // Additional info
+    round: number;
+    dateTime: number;
 
     constructor(gameUid: string);
     constructor(uid: string, data: IResultData);
@@ -15,7 +18,9 @@ export class Result {
             this.gameUid = data.gameUid;
             this.dateTime = data.dateTime || Date.now();
             this.guesses = data.guesses;
+            this.round = data.round;
         } else {
+            this.round = 0;
             this.uid = getRandomString();
             this.gameUid = gameUidOrUid;
             this.dateTime = Date.now();
@@ -36,6 +41,7 @@ export class Result {
             gameUid: this.gameUid,
             dateTime: this.dateTime,
             guesses: this.guesses,
+            round: this.round,
         };
     }
 

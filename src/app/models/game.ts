@@ -12,6 +12,9 @@ export class Game {
     round: number;
     teams: Team[];
 
+    // Additional info
+    dateTime: number;
+
     constructor(uid: string, data: IGameData) {
         this.uid = uid;
         this.level = data.level;
@@ -20,6 +23,10 @@ export class Game {
         this.roundTime = data.roundTime;
         this.round = data.round;
         this.teams = data.teams.map(teamData => new Team(teamData));
+        this.dateTime = data.dateTime;
+        if (!this.dateTime) {
+            this.dateTime = Date.now();
+        }
     }
 
     toJson(): IGameData {
@@ -30,6 +37,7 @@ export class Game {
             roundTime: this.roundTime,
             teams: this.teams.map(team => team.toJson()),
             round: this.round,
+            dateTime: this.dateTime,
         };
     }
 

@@ -23,6 +23,7 @@ export class GameSettings {
             roundTime: this.roundTime,
             teamsCount: this.teamsCount,
             pointCounts: this.pointCounts,
+            dateTime: Date.now(),
             round: 1,
             teams: [],
         });
