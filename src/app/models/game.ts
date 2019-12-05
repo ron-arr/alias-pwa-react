@@ -1,4 +1,4 @@
-import { IGameData } from 'als-data-types/game';
+import { IGameData, TRoundTime } from 'als-data-types/game';
 import { Team } from 'als-models';
 
 const ROUND_TITLES = ['Первый', 'Второй', 'Третий'];
@@ -8,7 +8,7 @@ export class Game {
     teamsCount: number;
     pointCounts: number;
     level: 1 | 2 | 3;
-    roundTime: 30 | 60 | 90 | 120;
+    roundTime: TRoundTime;
     round: number;
     teams: Team[];
 

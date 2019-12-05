@@ -57,14 +57,18 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                 <Header title={'Команды'} />
                 <div className={cn('table')}>
                     <div className={cn('row')}>
+                        <div className={cn('col')}>#</div>
                         <div className={cn('col')}></div>
                         <div className={cn('col', { head: true })}>Команда</div>
                         <div className={cn('col', { head: true })}>Очки</div>
                     </div>
-                    {game.getSortedTeams().map(team => {
+                    {game.getSortedTeams().map((team, index) => {
                         const TeamIcon = teamIcons[team.id];
                         return (
-                            <div key={team.id} className={cn('row')}>
+                            <div key={team.id} className={cn('row', { winner: Boolean(winner) && index === 0 })}>
+                                <div className={cn('col')}>
+                                    <div className={cn('counter')}>{index + 1}</div>
+                                </div>
                                 <div className={cn('col')}>
                                     <TeamIcon.Icon width={32} height={32} />
                                 </div>
