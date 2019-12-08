@@ -24,11 +24,6 @@ const scssRule = {
         },
         {
             loader: 'sass-loader',
-            options: {
-                sassOptions: {
-                    includePaths: [resolve(__dirname, '../node_modules/compass-mixins/lib')],
-                },
-            },
         },
     ],
 };

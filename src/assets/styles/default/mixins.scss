@@ -1,9 +1,9 @@
 @mixin double-shadow($color) {
-    @include box-shadow(0 1px 0 lighten($color, 10%) inset, 0 -1px 0 darken($color, 10%) inset);
+    box-shadow: 0 1px 0 lighten($color, 10%) inset, 0 -1px 0 darken($color, 10%) inset;
 }
 
 @mixin shadow($color) {
-    @include box-shadow(0 0 8px lighten($color, 10%) inset, 0 -1px 0 darken($color, 10%) inset);
+    box-shadow: 0 0 8px lighten($color, 10%) inset, 0 -1px 0 darken($color, 10%) inset;
 }
 
 @mixin hover-style($color) {
@@ -20,10 +20,4 @@
     @keyframes #{$name} {
         @content;
     }
-}
-
-@mixin ul-nostyle {
-    list-style: none;
-    padding: 0;
-    margin: 0;
 }

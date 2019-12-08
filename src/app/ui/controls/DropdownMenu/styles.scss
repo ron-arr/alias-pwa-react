@@ -1,4 +1,4 @@
-@import 'compass/css3', 'styles/default/colors', 'styles/default/mixins';
+@import 'styles/default/colors', 'styles/default/mixins';
 
 .dropdown-menu {
     $component: &;
@@ -30,8 +30,8 @@
         display: block;
         color: $primary-text;
         background: $primary;
-        @include double-shadow($primary-dark);
-        @include text-shadow(2px 2px 5px rgba(0, 0, 0, 0.3));
+        box-shadow: 0 1px 0 lighten($primary-dark, 10%) inset, 0 -1px 0 darken($primary-dark, 10%) inset;
+        text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
         padding: 10px 25px 10px 10px;
 
         &:before {
@@ -42,21 +42,20 @@
             color: $primary-text;
             top: 10px;
             right: 10px;
-            @include transform(rotate(0deg));
-            @include transition(transform 0.6s);
+            transform: rotate(0deg);
+            transition: transform 0.6s;
         }
 
         &--open {
             &:before {
-                @include transform(rotate(-180deg));
-                @include transition(transform 0.6s);
+                transform: rotate(-180deg);
+                transition: transform 0.6s;
             }
 
             + #{$component}__items {
                 max-height: 9999px;
                 display: block;
-                @include transform(scaleY(1));
-                @include transition(max-height 2s ease-in-out);
+                transition: max-height 2s ease-in-out;
             }
         }
     }
@@ -68,9 +67,11 @@
     &__items {
         max-height: 0;
         overflow: hidden;
-        @include ul-nostyle;
-        @include transform(scaleY(0));
-        @include transition(max-height 0.6s ease-out);
+        transition: max-height 2s ease-out;
+        transition-delay: -1s;
+        list-style: none;
+        padding: 0;
+        margin: 0;
     }
 
     &__item {
@@ -83,9 +84,12 @@
         width: 100%;
         color: darken($secondary-text, 50%);
         background: $secondary-light;
-        @include double-shadow($secondary-dark);
-        @include hover-style($secondary-dark);
-        @include text-shadow(0 -1px 0 rgba(255, 255, 255, 0.3));
+        box-shadow: 0 1px 0 lighten($secondary-dark, 10%) inset, 0 -1px 0 darken($secondary-dark, 10%) inset;
+        text-shadow: 0 -1px 0 rgba(255, 255, 255, 0.3);
         padding: 10px 10px;
+
+        &:hover {
+            background: lighten($secondary-dark, 3%);
+        }
     }
 }

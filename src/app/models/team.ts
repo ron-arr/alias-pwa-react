@@ -8,6 +8,7 @@ import {
     LiquorIcon,
     GhostIcon,
     SportIcon,
+    SaleIcon,
 } from 'als-icons/teamsIcons';
 import { ITeamData, TTeamIcon } from 'als-data-types/team';
 
@@ -56,8 +57,8 @@ export const teamIcons: TTeamIcon[] = [
         Icon: BrainIcon,
     },
     {
-        title: 'Бешеные кролики',
-        Icon: BunnyIcon,
+        title: 'Акционеры',
+        Icon: SaleIcon,
     },
     {
         title: 'Выпивающие',
@@ -70,5 +71,9 @@ export const teamIcons: TTeamIcon[] = [
     {
         title: 'Спортсмены',
         Icon: SportIcon,
+    },
+    {
+        title: 'Бешеные кролики',
+        Icon: BunnyIcon,
     },
 ];
