@@ -19,10 +19,11 @@ module.exports = {
     devtool: 'cheap-module-eval-source-map',
     plugins: [
         new HtmlWebpackPlugin({
+            title: 'Alias',
             template: resolve('src', 'app', 'index.html'),
             hash: false,
         }),
-        new webpack.HotModuleReplacementPlugin(), // enable HMR globally
-        new webpack.NamedModulesPlugin(), // prints more readable module names in the browser console on HMR updates
+        new webpack.HotModuleReplacementPlugin(),
+        new webpack.NamedModulesPlugin(),
     ],
 };

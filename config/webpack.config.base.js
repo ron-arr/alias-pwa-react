@@ -1,12 +1,15 @@
 const { resolve } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-
+const isProduction = process.env.NODE_ENV === 'production';
 const alias = require('./alias');
 const scssRule = {
     test: /\.scss$/,
     use: [
         {
             loader: MiniCssExtractPlugin.loader,
+            options: {
+                hmr: !isProduction,
+            },
         },
         {
             loader: 'css-loader',

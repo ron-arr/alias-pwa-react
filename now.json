@@ -12,8 +12,16 @@
             "dest": "/public/manifest.$1"
         },
         {
+            "src": "^/precache-manifest.(.*)",
+            "dest": "/public/precache-manifest.$1"
+        },
+        {
             "src": "^/favicon.ico",
             "dest": "/public/favicon.ico"
+        },
+        {
+            "src": "^/service-worker.js",
+            "dest": "/public/service-worker.js"
         },
         {
             "src": "^/(.*)",
