@@ -1,6 +1,6 @@
 import { Style, spring } from 'react-motion';
 
-export type TMotionStatus = 'ORIGIN' | 'ROLLBACK' | 'ACCEPT' | 'SKIP' | 'DRAG' | 'STOP';
+export type TMotionStatus = 'ROLLBACK' | 'ACCEPT' | 'SKIP' | 'DRAG' | 'STOP';
 
 const defaultConfig = { stiffness: 330, damping: 60, precision: 1 };
 
@@ -15,7 +15,7 @@ export const getMotionStyle = (status: TMotionStatus, x: number, y: number): Sty
             x: x,
             y: y,
         };
-    } else if (status === 'ORIGIN' || status === 'ROLLBACK' || status === 'STOP') {
+    } else if (status === 'ROLLBACK' || status === 'STOP') {
         style = {
             scale: spring(1, { stiffness: 400, damping: 10, precision: 0.1 }),
             shadow: spring(1, defaultConfig),

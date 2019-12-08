@@ -35,6 +35,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         index: 0,
         motionStatus: 'ROLLBACK',
     });
+    const [disabled, setDisabled] = useState(false);
     const { index, mouseY, mouseX, topDeltaY, leftDeltaX, motionStatus, result } = state;
     const acceptRef = useRef<HTMLDivElement>(null);
     const skipRef = useRef<HTMLDivElement>(null);
@@ -44,11 +45,15 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
     useEffect(() => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             setTimeout(() => {
-                handleRelease(index);
+                release(index);
             }, 300);
+            setTimeout(() => {
+                setDisabled(false);
+            }, 1000);
         }
         if (motionStatus === 'STOP') {
             // Остановка игры
+            setDisabled(true);
             result.add({
                 status: 'LAST',
                 word: words[index],
@@ -59,7 +64,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
 
     const handleDrag = useCallback(
         (pressX: number, pressY: number, pageX: number, pageY: number) => {
-            if (motionStatus === 'ROLLBACK') {
+            if (motionStatus === 'ROLLBACK' && !disabled) {
                 setState(prevState => {
                     if (prevState.motionStatus !== 'STOP') {
                         return {
@@ -75,7 +80,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
                 });
             }
         },
-        [motionStatus]
+        [motionStatus, disabled]
     );
 
     const handleMouseDown = (pressY: number, pressX: number, { pageY, pageX }: React.MouseEvent) => {
@@ -106,6 +111,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         }
         setState(prevState => {
             if (prevState.motionStatus !== 'STOP') {
+                setDisabled(true);
                 return {
                     ...prevState,
                     motionStatus: newMotionStatus,
@@ -115,7 +121,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
             return prevState;
         });
     };
-    const handleMouseUp = ({ pageY, pageX }: React.MouseEvent) => {
+    const handleMouseUp = () => {
         if (motionStatus === 'DRAG') {
             handleDrop();
         }
@@ -136,20 +142,20 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
         handleMove(pageY, pageX);
     };
 
-    const handleAcceptSkip = useCallback(
-        (_motionStatus: TMotionStatus) => {
-            if (motionStatus === 'ROLLBACK') {
-                setState({
-                    ...state,
-                    motionStatus: _motionStatus,
-                    mouseY: Number(_motionStatus === 'SKIP'),
-                });
-            }
-        },
-        [motionStatus]
-    );
+    const handleAcceptSkip = (newMotionStatus: TMotionStatus) => {
+        if (motionStatus === 'ROLLBACK' && !disabled) {
+            setDisabled(true);
+            setState(prevState => {
+                return {
+                    ...prevState,
+                    motionStatus: newMotionStatus,
+                    mouseY: Number(newMotionStatus === 'SKIP'),
+                };
+            });
+        }
+    };
 
-    const handleRelease = (_index: number) => {
+    const release = (_index: number) => {
         if (motionStatus === 'ACCEPT' || motionStatus === 'SKIP') {
             result.add({
                 status: motionStatus === 'ACCEPT' ? 'ACCEPTED' : 'SKIPPED',
@@ -157,7 +163,12 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
             });
             setState(prevState => {
                 if (prevState.motionStatus !== 'STOP') {
-                    return { ...prevState, motionStatus: 'ROLLBACK', index: _index + 1, result };
+                    return {
+                        ...prevState,
+                        motionStatus: 'ROLLBACK',
+                        index: _index + 1,
+                        result,
+                    };
                 }
                 return prevState;
             });
@@ -184,12 +195,20 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
             {motionStatus !== 'STOP' && (
                 <>
                     <div className={cn('accept')} ref={acceptRef}>
-                        <button className={cn('btn-title', { accept: true })} onClick={() => handleAcceptSkip('ACCEPT')}>
+                        <button
+                            className={cn('btn-title', { accept: true })}
+                            onClick={handleAcceptSkip.bind(null, 'ACCEPT')}
+                            disabled={disabled}
+                        >
                             Верно
                         </button>
                     </div>
                     <div className={cn('skip')} ref={skipRef}>
-                        <button className={cn('btn-title', { skip: true })} onClick={() => handleAcceptSkip('SKIP')}>
+                        <button
+                            className={cn('btn-title', { skip: true })}
+                            onClick={handleAcceptSkip.bind(null, 'SKIP')}
+                            disabled={disabled}
+                        >
                             Пропустить
                         </button>
                     </div>

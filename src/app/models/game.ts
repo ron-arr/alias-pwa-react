@@ -58,7 +58,7 @@ export class Game {
     }
 
     getSortedTeams(): Team[] {
-        return this.teams.sort((a, b) => (a.points < b.points ? 1 : -1));
+        return [...this.teams].sort((a, b) => (a.points < b.points ? 1 : -1));
     }
 
     setPointsForCurrentTeam(points: number): void {

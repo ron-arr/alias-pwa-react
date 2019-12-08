@@ -66,6 +66,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         (result: Result) => {
             if (game) {
                 result.round = game.round;
+                setState(prevState => ({ ...prevState, status: 'GAME', disabled: true }));
                 const saveReqs = Promise.all([resultRepo.save(result), gameRepo.save(game)]);
                 saveReqs.then(() => {
                     setTimeout(() => {
@@ -74,7 +75,6 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
                             resultData: result.toJson(),
                         });
                     }, 3000);
-                    setState(prevState => ({ ...prevState, status: 'GAME', disabled: true }));
                 });
             }
         },
