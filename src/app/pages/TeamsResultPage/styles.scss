@@ -7,8 +7,12 @@
     align-items: center;
     justify-items: center;
 
+    &__winner-icon {
+        margin: 20px 0;
+    }
+
     &__table {
-        padding: 20px 30px;
+        padding: 0 30px;
         max-width: 350px;
         width: 100%;
     }
@@ -63,5 +67,11 @@
     &__btn {
         display: inline-flex;
         align-self: center;
+    }
+
+    &__finish-btn {
+        position: absolute;
+        bottom: 40px;
+        width: 90%;
     }
 }

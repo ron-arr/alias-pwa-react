@@ -1,4 +1,14 @@
-import { AngelIcon, HipsterIcon, CoffeeManIcon, LgbtIcon, BrainIcon, BunnyIcon, LiquorIcon, GhostIcon } from 'als-icons/teamsIcons';
+import {
+    AngelIcon,
+    HipsterIcon,
+    CoffeeManIcon,
+    LgbtIcon,
+    BrainIcon,
+    BunnyIcon,
+    LiquorIcon,
+    GhostIcon,
+    SportIcon,
+} from 'als-icons/teamsIcons';
 import { ITeamData, TTeamIcon } from 'als-data-types/team';
 
 export class Team {
@@ -56,5 +66,9 @@ export const teamIcons: TTeamIcon[] = [
     {
         title: 'Полтергейсты',
         Icon: GhostIcon,
+    },
+    {
+        title: 'Спортсмены',
+        Icon: SportIcon,
     },
 ];

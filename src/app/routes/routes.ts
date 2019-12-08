@@ -17,7 +17,7 @@ const routes: IRoute[] = [
     },
     {
         path: '/teams/:gameUid',
-        component: React.lazy(() => import('als-pages/TeamsPage').then(module => ({ default: module.TeamsPage }))),
+        component: React.lazy(() => import('als-pages/TeamsResultPage').then(module => ({ default: module.TeamsPage }))),
     },
     {
         path: '/results/:resultUid',

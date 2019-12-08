@@ -8,6 +8,7 @@ import { Game } from 'als-models';
 import { Loader } from 'als-components/Loader';
 import { gameRepo } from 'als-db-manager';
 import { Header } from 'als-components/Header';
+import WinnerIcon from 'als-icons/otherIcons';
 
 interface IRouterProps {
     gameUid: string;
@@ -55,6 +56,7 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
         return (
             <div className={cn()}>
                 <Header title={'Команды'} />
+                {winner && <WinnerIcon className={cn('winner-icon')} width={52} height={52} />}
                 <div className={cn('table')}>
                     <div className={cn('row')}>
                         <div className={cn('col')}>#</div>
@@ -78,13 +80,13 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
                         );
                     })}
                 </div>
-                <div className={cn('btn')}>
-                    {winner ? (
-                        <Button text={'Закончить'} type="secondary" onAction={handleGameOver} />
-                    ) : (
+                {winner ? (
+                    <Button className={cn('finish-btn')} text={'Закончить'} type="secondary" onAction={handleGameOver} />
+                ) : (
+                    <div className={cn('btn')}>
                         <Button text={'Продолжить'} type="secondary" onAction={handleContinue} />
-                    )}
-                </div>
+                    </div>
+                )}
             </div>
         );
     } else if (!loaded) {
