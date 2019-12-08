@@ -7,6 +7,8 @@ import { useHistory } from 'react-router-dom';
 import { GameSettings } from 'als-models';
 import { gameRepo } from 'als-db-manager';
 import { Curtain } from 'als-components/Curtain';
+import { AddToHomeScreenBtn } from './AddToHomeScreenBtn';
+import { LogoIcon } from 'als-icons/otherIcons';
 
 const cn = classNameBuilder('main');
 
@@ -25,8 +27,9 @@ export const MainPage: React.FC = () => {
     let settings = new GameSettings();
     return (
         <div className={cn()}>
+            <LogoIcon className={cn('logo')} width={200} height={100} />
+            <AddToHomeScreenBtn />
             {disabled && <Curtain />}
-            <div className={cn('title')}>Alias</div>
             <Settings
                 disabled={disabled}
                 settings={settings}

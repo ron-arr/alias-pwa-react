@@ -1,4 +1,7 @@
+@import 'styles/default/colors';
+
 .main {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -7,15 +10,31 @@
     margin: 20px auto;
     overflow-y: auto;
 
-    &__title {
-        margin-top: 36px;
-        font-size: 24px;
-    }
-
     &__btn {
         z-index: 0;
         position: fixed;
         bottom: 40px;
         width: 90%;
+    }
+
+    &__logo {
+        margin-top: 24px;
+        stroke-dasharray: 100;
+        stroke: $primary-dark;
+        stroke-width: 2px;
+        animation: dash-anim 10s ease forwards, stroke-anim 8s ease forwards;
+    }
+}
+
+@keyframes dash-anim {
+    to {
+        stroke-dasharray: 400;
+    }
+}
+
+@keyframes stroke-anim {
+    to {
+        stroke: $primary-light;
+        stroke-width: 4px;
     }
 }
