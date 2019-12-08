@@ -1,4 +1,5 @@
-import { ITeamData } from 'als-data-types/team';
+import { AngelIcon, HipsterIcon, CoffeeManIcon, LgbtIcon, BrainIcon, BunnyIcon, LiquorIcon, GhostIcon } from 'als-icons/teamsIcons';
+import { ITeamData, TTeamIcon } from 'als-data-types/team';
 
 export class Team {
     id: number;
@@ -11,7 +12,6 @@ export class Team {
         this.name = data.name;
         this.points = data.points;
         this.lastRound = data.lastRound;
-        
     }
 
     toJson(): ITeamData {
@@ -23,3 +23,38 @@ export class Team {
         };
     }
 }
+
+export const teamIcons: TTeamIcon[] = [
+    {
+        title: 'Ангелочки',
+        Icon: AngelIcon,
+    },
+    {
+        title: 'Чувачки',
+        Icon: HipsterIcon,
+    },
+    {
+        title: 'Кофеманы',
+        Icon: CoffeeManIcon,
+    },
+    {
+        title: 'Лгбт',
+        Icon: LgbtIcon,
+    },
+    {
+        title: 'Мозголобы',
+        Icon: BrainIcon,
+    },
+    {
+        title: 'Бешеные кролики',
+        Icon: BunnyIcon,
+    },
+    {
+        title: 'Выпивающие',
+        Icon: LiquorIcon,
+    },
+    {
+        title: 'Полтергейсты',
+        Icon: GhostIcon,
+    },
+];

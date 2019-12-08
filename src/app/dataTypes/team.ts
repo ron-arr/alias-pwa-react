@@ -4,3 +4,5 @@ export interface ITeamData {
     points: number;
     lastRound: number;
 }
+
+export type TTeamIcon = { title: string; Icon: Function };

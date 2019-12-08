@@ -2,11 +2,11 @@ import './styles.scss';
 import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
-import { teamIcons } from 'als-ui/icons';
 import { gameRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
 import { Game, Team } from 'als-models';
 import { Header } from 'als-components/Header';
+import { teamIcons } from 'als-models/team';
 
 interface IRouterProps {
     gameUid: string;

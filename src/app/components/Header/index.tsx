@@ -1,8 +1,7 @@
 import './styles.scss';
 import React from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { HipsterIcon } from 'als-icons/teamsIcons';
-import { TTeamIcon } from 'als-ui/icons';
+import { TTeamIcon } from 'als-data-types/team';
 
 interface IProps {
     title: string;

@@ -1,7 +1,7 @@
 import './styles.scss';
 import React from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { teamIcons } from 'als-ui/icons';
+import { teamIcons } from 'als-models/team';
 import { Team } from 'als-models';
 
 interface IProps {

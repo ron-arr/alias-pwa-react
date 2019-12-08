@@ -10,7 +10,7 @@ import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
 import { NoResult } from 'als-icons/otherIcons';
-import { teamIcons } from 'als-ui/icons';
+import { teamIcons } from 'als-models/team';
 
 interface IRouterProps {
     resultUid: string;

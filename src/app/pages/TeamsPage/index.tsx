@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button } from 'als-ui/controls';
-import { teamIcons } from 'als-ui/icons';
+import { teamIcons } from 'als-models/team';
 import { Game } from 'als-models';
 import { Loader } from 'als-components/Loader';
 import { gameRepo } from 'als-db-manager';
