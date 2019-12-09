@@ -49,7 +49,7 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
             }, 300);
             setTimeout(() => {
                 setDisabled(false);
-            }, 1000);
+            }, 800);
         }
         if (motionStatus === 'STOP') {
             // Остановка игры
@@ -101,17 +101,18 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
 
         if (mouseY < 0) {
             if (top > mouseY + cardBounds.top) {
+                setDisabled(true);
                 newMotionStatus = 'ACCEPT';
             }
         }
         if (mouseY > 0) {
             if (bottom < mouseY + cardBounds.bottom) {
+                setDisabled(true);
                 newMotionStatus = 'SKIP';
             }
         }
         setState(prevState => {
             if (prevState.motionStatus !== 'STOP') {
-                setDisabled(true);
                 return {
                     ...prevState,
                     motionStatus: newMotionStatus,

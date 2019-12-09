@@ -14,7 +14,6 @@ interface IRouterProps {
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
 interface IState {
-    loaded: boolean;
     game: null | Game;
     teamIds: number[];
 }
@@ -25,22 +24,10 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
-        loaded: Boolean(gameData),
         game: gameData ? new Game(gameUid, gameData) : null,
         teamIds: [],
     });
-    const { game, loaded, teamIds } = state;
-    if (!loaded) {
-        gameRepo
-            .get(gameUid)
-            .then(game => {
-                game.teams = [];
-                setState({ ...state, game, loaded: true });
-            })
-            .catch(() => {
-                setState({ ...state, loaded: true });
-            });
-    }
+    const { game, teamIds } = state;
 
     if (game) {
         const handleChoose = (iconIndex: number) => {
@@ -84,9 +71,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                 </div>
             </div>
         );
-    } else if (!loaded) {
-        return <Loader />;
+    } else {
+        return <Redirect to="/" />;
     }
-
-    return <Redirect to="/" />;
 };

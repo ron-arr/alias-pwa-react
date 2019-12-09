@@ -5,7 +5,6 @@ import {
     LgbtIcon,
     BrainIcon,
     BunnyIcon,
-    LiquorIcon,
     GhostIcon,
     SportIcon,
     SaleIcon,
@@ -59,10 +58,6 @@ export const teamIcons: TTeamIcon[] = [
     {
         title: 'Акционеры',
         Icon: SaleIcon,
-    },
-    {
-        title: 'Выпивающие',
-        Icon: LiquorIcon,
     },
     {
         title: 'Полтергейсты',
