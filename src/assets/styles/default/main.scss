@@ -18,6 +18,8 @@ body {
 #content {
     margin: 0 auto;
     width: 100%;
+    overflow-y: hidden;
+    overflow-x: hidden;
     // pointer-events: none;
     // touch-action: none;
 }

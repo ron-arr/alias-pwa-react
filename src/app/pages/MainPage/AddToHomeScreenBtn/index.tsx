@@ -13,13 +13,14 @@ interface BeforeInstallPromptEvent extends Event {
 const cn = classNameBuilder('add-2hs');
 
 export const AddToHomeScreenBtn: React.FC = () => {
-    const [show, setShow] = useState(true);
     const [deffered, setDeffered] = useState<BeforeInstallPromptEvent | null>(null);
+    console.log('deffered', deffered);
     useEffect(() => {
+        console.log('useEffect');
         window.addEventListener('beforeinstallprompt', e => {
+            console.log('e', e);
             e.preventDefault();
             setDeffered(e as BeforeInstallPromptEvent);
-            setShow(true);
         });
 
         return () => {
@@ -42,7 +43,7 @@ export const AddToHomeScreenBtn: React.FC = () => {
             });
         }
     };
-    if (window.matchMedia('display-mode: standalone').matches || !show) {
+    if (!deffered || window.matchMedia('display-mode: standalone').matches) {
         return null;
     }
     return (

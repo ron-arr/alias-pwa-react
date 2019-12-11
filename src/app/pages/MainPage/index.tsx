@@ -1,5 +1,5 @@
 import './styles.scss';
-import React, { useState } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Button } from 'als-ui/controls';
 import { Settings } from 'als-pages/MainPage/Settings';
 import { classNameBuilder } from 'als-services/className';
@@ -8,12 +8,17 @@ import { GameSettings } from 'als-models';
 import { Curtain } from 'als-components/Curtain';
 import { AddToHomeScreenBtn } from './AddToHomeScreenBtn';
 import { LogoIcon } from 'als-icons/otherIcons';
+import { IAppContext, AppContext } from 'als-contexts/app';
 
 const cn = classNameBuilder('main');
 
 export const MainPage: React.FC = () => {
+    const context = useContext<IAppContext>(AppContext);
     const [disabled, setDisabled] = useState(false);
     const history = useHistory();
+    useEffect(() => {
+        context.showHeader();
+    }, []);
 
     const handleStart = () => {
         setDisabled(true);

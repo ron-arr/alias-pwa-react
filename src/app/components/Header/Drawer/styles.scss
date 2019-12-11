@@ -48,8 +48,8 @@
         height: 100%;
         width: #{$left};
         background: $primary-light;
+        overflow-y: hidden;
         overflow-x: hidden;
-        overflow-y: scroll;
         padding: 20px;
 
         #{$component}__toggle:checked ~ & {
