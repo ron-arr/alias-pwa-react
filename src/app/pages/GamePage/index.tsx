@@ -1,16 +1,16 @@
 import './styles.scss';
-import React, { useState, useCallback, useEffect, useMemo } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useContext } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Game, Result } from 'als-models';
 import { gameRepo, resultRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
-import { Header } from 'als-components/Header';
 import { TeamRound } from './TeamRound';
 import { Button } from 'als-ui/controls';
 import { Cards } from './Cards';
 import { shuffle } from 'als-services/utils';
 import { Curtain } from 'als-components/Curtain';
+import { AppContext, IAppContext } from 'als-contexts/app';
 
 type TStatus = 'TEAM' | 'GAME';
 
@@ -29,6 +29,7 @@ interface IProps extends RouteComponentProps<IRouterProps> {}
 const cn = classNameBuilder('game');
 
 export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
+    const context = useContext<IAppContext>(AppContext);
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
@@ -39,6 +40,14 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         words: [],
     });
     const { game, loaded, status, disabled, words } = state;
+    useEffect(() => {
+        if (status === 'TEAM' && game) {
+            context.showHeader();
+            context.setHeaderProps({ title: `${game.roundTitle} раунд` });
+        } else {
+            context.hideHeader();
+        }
+    }, [game, status]);
     if (game && !words.length) {
         import('alias-words').then(module => {
             let _words;
@@ -89,7 +98,6 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
             <div className={cn()}>
                 {status === 'TEAM' && (
                     <>
-                        <Header title={`${game.roundTitle} раунд`} />
                         <TeamRound className={cn('team')} team={game.currentTeam} />
                         <Button className={cn('start-btn')} text="Начать" onAction={handleStart} />
                     </>

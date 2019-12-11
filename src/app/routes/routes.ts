@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { lazy } from 'react';
 import { MainPage } from 'als-pages/MainPage';
+import { RouteProps } from 'react-router-dom';
 
-interface IRoute {
+export interface IRoute extends RouteProps {
     path: string;
     component: React.FC<any>;
 }
@@ -13,27 +14,27 @@ const routes: IRoute[] = [
     },
     {
         path: '/select-teams/:gameUid',
-        component: React.lazy(() => import('als-pages/SelectTeamPage').then(module => ({ default: module.SelectTeamPage }))),
+        component: lazy(() => import('als-pages/SelectTeamPage').then(module => ({ default: module.SelectTeamPage }))),
     },
     {
         path: '/teams/:gameUid',
-        component: React.lazy(() => import('als-pages/TeamsResultPage').then(module => ({ default: module.TeamsPage }))),
+        component: lazy(() => import('als-pages/TeamsResultPage').then(module => ({ default: module.TeamsPage }))),
     },
     {
         path: '/results/:resultUid',
-        component: React.lazy(() => import('als-pages/RoundResultsPage').then(module => ({ default: module.RoundResultsPage }))),
+        component: lazy(() => import('als-pages/RoundResultsPage').then(module => ({ default: module.RoundResultsPage }))),
     },
     {
         path: '/game/:gameUid',
-        component: React.lazy(() => import('als-pages/GamePage').then(module => ({ default: module.GamePage }))),
+        component: lazy(() => import('als-pages/GamePage').then(module => ({ default: module.GamePage }))),
     },
     {
         path: '/words',
-        component: React.lazy(() => import('als-pages/WordsPage').then(module => ({ default: module.WordsPage }))),
+        component: lazy(() => import('als-pages/WordsPage').then(module => ({ default: module.WordsPage }))),
     },
     {
         path: '/loading',
-        component: React.lazy(() => import('als-components/Loader').then(module => ({ default: module.Loader }))),
+        component: lazy(() => import('als-components/Loader').then(module => ({ default: module.Loader }))),
     },
 ];
 

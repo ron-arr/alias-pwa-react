@@ -1,5 +1,5 @@
 import './styles.scss';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button } from 'als-ui/controls';
@@ -7,8 +7,8 @@ import { teamIcons } from 'als-models/team';
 import { Game } from 'als-models';
 import { Loader } from 'als-components/Loader';
 import { gameRepo } from 'als-db-manager';
-import { Header } from 'als-components/Header';
 import WinnerIcon from 'als-icons/otherIcons';
+import { IAppContext, AppContext } from 'als-contexts/app';
 
 interface IRouterProps {
     gameUid: string;
@@ -22,6 +22,11 @@ interface IState {
 const cn = classNameBuilder('teams');
 
 export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    const context = useContext<IAppContext>(AppContext);
+    useEffect(() => {
+        context.showHeader();
+        context.setHeaderProps({ title: 'Команды' });
+    }, []);
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
@@ -55,7 +60,6 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
         const winner = game.winner;
         return (
             <div className={cn()}>
-                <Header title={'Команды'} />
                 {winner && <WinnerIcon className={cn('winner-icon')} width={52} height={52} />}
                 <div className={cn('table')}>
                     <div className={cn('row')}>

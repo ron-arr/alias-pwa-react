@@ -13,7 +13,7 @@ interface BeforeInstallPromptEvent extends Event {
 const cn = classNameBuilder('add-2hs');
 
 export const AddToHomeScreenBtn: React.FC = () => {
-    const [show, setShow] = useState(false);
+    const [show, setShow] = useState(true);
     const [deffered, setDeffered] = useState<BeforeInstallPromptEvent | null>(null);
     useEffect(() => {
         window.addEventListener('beforeinstallprompt', e => {
@@ -42,20 +42,12 @@ export const AddToHomeScreenBtn: React.FC = () => {
             });
         }
     };
-    const handleCancel = () => {
-        setShow(false);
-    };
     if (window.matchMedia('display-mode: standalone').matches || !show) {
         return null;
     }
     return (
-        <div className={cn()}>
-            <button onClick={handleCancel} className={cn('cancel')}>
-                Отмена
-            </button>
-            <button onClick={handleInstall} className={cn('btn')}>
-                Добавить приложение на рабочий стол
-            </button>
-        </div>
+        <button onClick={handleInstall} className={cn('')}>
+            Добавить приложение
+        </button>
     );
 };

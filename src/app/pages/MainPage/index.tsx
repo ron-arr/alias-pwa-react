@@ -24,7 +24,7 @@ export const MainPage: React.FC = () => {
     return (
         <div className={cn()}>
             <LogoIcon className={cn('logo')} width={200} height={100} />
-            <AddToHomeScreenBtn />
+            {/* <AddToHomeScreenBtn /> */}
             {disabled && <Curtain />}
             <Settings
                 disabled={disabled}

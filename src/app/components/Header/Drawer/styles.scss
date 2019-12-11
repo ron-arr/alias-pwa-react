@@ -1,0 +1,70 @@
+@import 'styles/default/colors';
+
+.drawer {
+    $component: &;
+    $left: 250px;
+
+    &__toggle {
+        position: absolute;
+        opacity: 0;
+    }
+
+    &__toggle-label {
+        pointer-events: auto;
+        user-select: none;
+        left: 0px;
+        height: 50px;
+        width: 50px;
+        display: block;
+        position: fixed;
+        background: rgba(255, 255, 255, 0);
+        z-index: 10;
+
+        &::before {
+            content: '';
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 24px;
+            background: $secondary;
+            left: 13px;
+            top: 18px;
+            box-shadow: 0 6px 0 $secondary, 0 12px 0 $secondary;
+        }
+
+        #{$component}__toggle:checked ~ & {
+            left: #{$left};
+            height: 100%;
+            width: calc(100% - #{$left});
+            background: rgba(255, 255, 255, 0.8);
+        }
+    }
+
+    &__menu {
+        z-index: 50;
+        position: fixed;
+        top: 0;
+        left: -#{$left};
+        height: 100%;
+        width: #{$left};
+        background: $primary-light;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        padding: 20px;
+
+        #{$component}__toggle:checked ~ & {
+            left: 0px;
+        }
+    }
+
+    &__list {
+        list-style-type: none;
+
+        & button {
+            display: block;
+            padding: 20px;
+            color: $primary-text;
+            text-decoration: none;
+        }
+    }
+}

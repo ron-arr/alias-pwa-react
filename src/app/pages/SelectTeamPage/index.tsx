@@ -1,12 +1,12 @@
 import './styles.scss';
-import React, { useState } from 'react';
+import React, { useState, useContext, useMemo, useEffect, memo } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { gameRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
 import { Game, Team } from 'als-models';
-import { Header } from 'als-components/Header';
 import { teamIcons } from 'als-models/team';
+import { IAppContext, AppContext } from 'als-contexts/app';
 
 interface IRouterProps {
     gameUid: string;
@@ -21,6 +21,8 @@ interface IState {
 const cn = classNameBuilder('select-teams');
 
 export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    console.log('SelectTeamPage');
+    const context = useContext<IAppContext>(AppContext);
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
     const [state, setState] = useState<IState>({
@@ -28,6 +30,10 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
         teamIds: [],
     });
     const { game, teamIds } = state;
+    useEffect(() => {
+        context.showHeader();
+        context.setHeaderProps({ title: `Выберите ${teamIds.length + 1}-ю команду` });
+    }, [teamIds]);
 
     if (game) {
         const handleChoose = (iconIndex: number) => {
@@ -53,7 +59,6 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
 
         return (
             <div className={cn()}>
-                <Header title={`Выберите ${teamIds.length + 1}-ю команду`} />
                 <div className={cn('teams')}>
                     {teamIcons.map((TeamIcon, index) => {
                         if (!~teamIds.indexOf(index)) {

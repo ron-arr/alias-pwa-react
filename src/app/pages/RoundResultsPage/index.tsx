@@ -1,16 +1,16 @@
 import './styles.scss';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { Button } from 'als-ui/controls';
 import { Game, Result } from 'als-models';
 import { Loader } from 'als-components/Loader';
 import { gameRepo, resultRepo } from 'als-db-manager';
-import { Header } from 'als-components/Header';
 import { THistoryState } from 'als-data-types/history';
 import { CheckFlip } from 'als-components/CheckFlip';
 import { NoResult } from 'als-icons/otherIcons';
 import { teamIcons } from 'als-models/team';
+import { IAppContext, AppContext } from 'als-contexts/app';
 
 interface IRouterProps {
     resultUid: string;
@@ -26,6 +26,7 @@ interface IState {
 const cn = classNameBuilder('round-results');
 
 export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) => {
+    const context = useContext<IAppContext>(AppContext);
     let { gameData = undefined, resultData = undefined }: THistoryState = history.location.state ? history.location.state : {};
     const resultUid = match.params.resultUid;
     const [state, setState] = useState<IState>({
@@ -34,6 +35,12 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         game: gameData && resultData ? new Game(resultData.gameUid, gameData) : null,
     });
     const { game, result, loaded } = state;
+    useEffect(() => {
+        if (game && game.currentTeam) {
+            context.showHeader();
+            context.setHeaderProps({ title: 'Результат', teamIcon: teamIcons[game.currentTeam.id] });
+        }
+    }, [game]);
     if (!loaded) {
         resultRepo
             .get(resultUid)
@@ -73,7 +80,6 @@ export const RoundResultsPage: React.FC<IProps> = ({ history, match }: IProps) =
         const points = result.getPoints();
         return (
             <div className={cn()}>
-                <Header title={'Результат'} teamIcon={teamIcons[game.currentTeam.id]} />
                 <div className={cn('stats-title')}>
                     Количество очков:
                     <span className={cn('stats', { pos: points > 0, neg: points < 0 })}>{points}</span>

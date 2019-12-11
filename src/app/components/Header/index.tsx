@@ -2,16 +2,19 @@ import './styles.scss';
 import React from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { TTeamIcon } from 'als-data-types/team';
+import { Drawer } from './Drawer';
 
-interface IProps {
+export interface IHeaderProps {
     title: string;
     teamIcon?: TTeamIcon;
 }
 const cn = classNameBuilder('header');
 
-export const Header: React.FC<IProps> = ({ title, teamIcon }: IProps) => {
+export const Header: React.FC<IHeaderProps> = ({ title, teamIcon }: IHeaderProps) => {
+    console.log('Header')
     return (
-        <div className={cn()}>
+        <header className={cn()}>
+            <Drawer />
             <h1 className={cn('title')}>
                 {title}
                 {teamIcon && (
@@ -20,6 +23,6 @@ export const Header: React.FC<IProps> = ({ title, teamIcon }: IProps) => {
                     </div>
                 )}
             </h1>
-        </div>
+        </header>
     );
 };

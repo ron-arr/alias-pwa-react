@@ -92,7 +92,6 @@ const Cards: React.FC<IProps> = ({ gameUid, words, time, onFinish }: IProps) => 
     };
 
     const handleTouchMove = (event: React.TouchEvent) => {
-        event.preventDefault();
         handleMove(event.touches[0].pageY, event.touches[0].pageX);
     };
 

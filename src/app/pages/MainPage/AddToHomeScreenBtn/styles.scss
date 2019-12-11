@@ -1,44 +1,7 @@
 @import 'styles/default/colors';
 
 .add-2hs {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    border-radius: 8px;
-    margin: 16px 20px;
-    padding: 8px;
-    background-color: $primary-light;
-
-    &__cancel {
-        margin-bottom: 8px;
-        text-transform: uppercase;
-        width: 100%;
-        color: $secondary-text;
-        border-radius: 8px;
-        border: 1px solid $primary-dark;
-        padding: 8px;
-        font-size: 1em;
-        pointer-events: auto;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        &:active {
-            background: $primary;
-        }
-    }
-
-    &__btn {
-        text-transform: uppercase;
-        color: $primary-text;
-        line-height: 1.2em;
-        border-radius: 8px;
-        border: 1px solid $primary-dark;
-        padding: 8px;
-        font-size: 1em;
-        pointer-events: auto;
-        cursor: pointer;
-        transition: background-color 0.2s;
-        &:active {
-            background: $primary;
-        }
-    }
+    line-height: 1.2em;
+    pointer-events: auto;
+    cursor: pointer;
 }
