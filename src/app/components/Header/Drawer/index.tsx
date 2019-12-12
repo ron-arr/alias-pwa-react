@@ -15,8 +15,8 @@ const items = [
         path: '/rules',
     },
     {
-        title: 'Обратная связь',
-        path: '/feedback',
+        title: 'О приложении',
+        path: '/about',
     },
 ];
 
@@ -35,7 +35,7 @@ export const Drawer: React.FC = () => {
                             </Link>
                         </li>
                     ))}
-                    <li>
+                    <li className={cn('item', {'add2hs': true})}>
                         <AddToHomeScreenBtn />
                     </li>
                 </ul>

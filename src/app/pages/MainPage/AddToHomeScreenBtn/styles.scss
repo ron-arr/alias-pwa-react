@@ -1,7 +1,14 @@
 @import 'styles/default/colors';
 
 .add-2hs {
-    line-height: 1.2em;
+    width: 100%;
+    color: inherit;
     pointer-events: auto;
     cursor: pointer;
+    font-size: 1.5rem;
+    letter-spacing: 4px;
+
+    &__text {
+        display: block;
+    }
 }

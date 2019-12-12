@@ -14,9 +14,7 @@ const cn = classNameBuilder('add-2hs');
 
 export const AddToHomeScreenBtn: React.FC = () => {
     const [deffered, setDeffered] = useState<BeforeInstallPromptEvent | null>(null);
-    console.log('deffered', deffered);
     useEffect(() => {
-        console.log('useEffect');
         window.addEventListener('beforeinstallprompt', e => {
             console.log('e', e);
             e.preventDefault();
@@ -48,7 +46,7 @@ export const AddToHomeScreenBtn: React.FC = () => {
     }
     return (
         <button onClick={handleInstall} className={cn('')}>
-            Добавить приложение
+            <span className={cn('text')}>Добавить приложение</span> <span className={cn('text')}>на домашний экран</span>
         </button>
     );
 };

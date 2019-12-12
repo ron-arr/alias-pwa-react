@@ -36,6 +36,14 @@ const routes: IRoute[] = [
         path: '/loading',
         component: lazy(() => import('als-components/Loader').then(module => ({ default: module.Loader }))),
     },
+    {
+        path: '/rules',
+        component: lazy(() => import('als-pages/RulesPage').then(module => ({ default: module.RulesPage }))),
+    },
+    {
+        path: '/about',
+        component: lazy(() => import('als-pages/AboutPage').then(module => ({ default: module.AboutPage }))),
+    },
 ];
 
 export default routes;
