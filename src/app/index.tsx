@@ -69,3 +69,14 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
+window.addEventListener('load', function() {
+    window.history.pushState({ noBackExitsApp: true }, '');
+});
+
+window.addEventListener('popstate', function(event) {
+    console.log('event.state', event.state)
+    if (event.state && event.state.noBackExitsApp) {
+        window.history.pushState({ noBackExitsApp: true }, '');
+    }
+});
