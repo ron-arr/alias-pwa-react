@@ -9,6 +9,10 @@
     justify-content: center;
     flex-direction: row;
 
+    &--empty {
+        background-color: transparent;
+    }
+
     &__title {
         display: inline-flex;
         font-size: 20px;

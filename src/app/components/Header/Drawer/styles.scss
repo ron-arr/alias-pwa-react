@@ -1,8 +1,13 @@
 @import 'styles/default/colors';
 
+$height: 100vh;
+
 .drawer {
     $component: &;
-    $left: 250px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10;
 
     &__toggle {
         position: absolute;
@@ -10,15 +15,15 @@
     }
 
     &__toggle-label {
+        position: fixed;
+        z-index: 11;
         pointer-events: auto;
         user-select: none;
-        left: 0px;
+        top: 0;
+        right: 0;
         height: 50px;
         width: 50px;
         display: block;
-        position: fixed;
-        background: rgba(255, 255, 255, 0);
-        z-index: 10;
 
         &::before {
             content: '';
@@ -26,45 +31,77 @@
             position: absolute;
             height: 2px;
             width: 24px;
-            background: $secondary;
-            left: 13px;
+            background: $secondary-dark;
+            left: 16px;
             top: 18px;
-            box-shadow: 0 6px 0 $secondary, 0 12px 0 $secondary;
+            box-shadow: 0 6px 0 $secondary-dark;
+            transition: transform 0.25s ease-in-out, opacity 200ms linear;
         }
 
-        #{$component}__toggle:checked ~ & {
-            left: #{$left};
-            height: 100%;
-            width: calc(100% - #{$left});
-            background: rgba(255, 255, 255, 0.8);
+        &::after {
+            content: '';
+            display: block;
+            position: absolute;
+            height: 2px;
+            width: 24px;
+            left: 16px;
+            top: 18px;
+            box-shadow: 0 12px 0 $secondary-dark;
+            transition: transform 0.25s ease-in-out, opacity 200ms linear;
+        }
+
+        #{$component}__toggle:checked + & {
+            transform: translateY(6px);
+
+            &::before {
+                width: 1;
+                transform: rotate(45deg) translateY(-6px) scale(0.8, 1);
+                background: transparent;
+                box-shadow: 0 6px 0 $secondary-light;
+            }
+
+            &::after {
+                width: 1;
+                transform: rotate(-45deg) translateY(-12px) scale(0.8, 1);
+                box-shadow: 0 12px 0 $secondary-light;
+                background: transparent;
+            }
         }
     }
 
     &__menu {
-        z-index: 50;
+        z-index: 10;
         position: fixed;
-        top: 0;
-        left: -#{$left};
-        height: 100%;
-        width: #{$left};
+        top: -#{$height};
+        left: 0;
+        height: #{$height};
+        width: 100%;
         background: $primary-light;
         overflow-y: hidden;
         overflow-x: hidden;
         padding: 20px;
+        transition: top 0.25s ease-in-out;
 
         #{$component}__toggle:checked ~ & {
-            left: 0px;
+            top: 0;
+            transition: top 0.25s ease-in-out;
         }
     }
 
     &__list {
         list-style-type: none;
+        margin-top: 30vh;
+    }
 
-        & button {
-            display: block;
-            padding: 20px;
-            color: $primary-text;
-            text-decoration: none;
+    &__item {
+        letter-spacing: 4px;
+        color: $primary-text;
+        font-size: 1.2em;
+        line-height: 32px;
+        text-align: center;
+
+        &--current {
+            color: $primary;
         }
     }
 }

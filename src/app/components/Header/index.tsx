@@ -11,9 +11,9 @@ export interface IHeaderProps {
 const cn = classNameBuilder('header');
 
 export const Header: React.FC<IHeaderProps> = ({ title, teamIcon }: IHeaderProps) => {
-    console.log('Header')
+    console.log('Header');
     return (
-        <header className={cn()}>
+        <header className={cn('', { empty: !title })}>
             <Drawer />
             <h1 className={cn('title')}>
                 {title}
