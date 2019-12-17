@@ -21,7 +21,6 @@ interface IState {
 const cn = classNameBuilder('select-teams');
 
 export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => {
-    console.log('SelectTeamPage');
     const context = useContext<IAppContext>(AppContext);
     const gameData = history.location.state ? history.location.state.gameData : null;
     const gameUid = match.params.gameUid;
@@ -38,21 +37,23 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
     if (game) {
         const handleChoose = (iconIndex: number) => {
             return () => {
-                game.teams.push(
-                    new Team({
-                        id: iconIndex,
-                        name: teamIcons[iconIndex].title,
-                        points: 0,
-                        lastRound: 0,
-                    })
-                );
-                if (teamIds.length + 1 < game.teamsCount) {
-                    setState({ ...state, teamIds: [...teamIds, iconIndex] });
-                } else {
-                    teamIds.push(iconIndex);
-                    gameRepo.save(game).then(() => {
-                        history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
-                    });
+                if (game.teams.findIndex(team => team.id === iconIndex) === -1) {
+                    game.teams.push(
+                        new Team({
+                            id: iconIndex,
+                            name: teamIcons[iconIndex].title,
+                            points: 0,
+                            lastRound: 0,
+                        })
+                    );
+                    if (teamIds.length + 1 < game.teamsCount) {
+                        setState(prevState => ({ ...prevState, teamIds: [...teamIds, iconIndex] }));
+                    } else {
+                        teamIds.push(iconIndex);
+                        gameRepo.save(game).then(() => {
+                            history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
+                        });
+                    }
                 }
             };
         };

@@ -15,10 +15,10 @@ $height: 100vh;
     }
 
     &__toggle-label {
+        user-select: auto;
+        pointer-events: auto;
         position: fixed;
         z-index: 11;
-        pointer-events: auto;
-        user-select: none;
         top: 0;
         right: 0;
         height: 50px;

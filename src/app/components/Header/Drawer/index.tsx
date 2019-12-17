@@ -3,6 +3,7 @@ import React from 'react';
 import { classNameBuilder } from 'als-services/className';
 import { AddToHomeScreenBtn } from 'als-pages/MainPage/AddToHomeScreenBtn';
 import { Link, useLocation } from 'react-router-dom';
+import ReactDOM from 'react-dom';
 
 const cn = classNameBuilder('drawer');
 const items = [
@@ -22,7 +23,8 @@ const items = [
 
 export const Drawer: React.FC = () => {
     const location = useLocation();
-    return (
+    const drawer = document.getElementById('c-als-drawer');
+    return ReactDOM.createPortal(
         <div className={cn('')}>
             <input className={cn('toggle')} type="checkbox" id="drawer-toggle" />
             <label className={cn('toggle-label')} htmlFor="drawer-toggle" id="drawer-toggle-label"></label>
@@ -41,5 +43,5 @@ export const Drawer: React.FC = () => {
                 </ul>
             </nav>
         </div>
-    );
+    , drawer as HTMLElement);
 };
