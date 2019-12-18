@@ -1,6 +1,9 @@
-import { TLevel, TRoundTime } from 'als-data-types/game';
+import { TLevel, TRoundTime, IGameData } from 'als-data-types/game';
 import { Game } from 'als-models';
 import { getRandomString } from 'als-services/utils';
+
+const CURRENT_GAME_KEY = 'currentGame';
+type TSavedGameData = IGameData & { uid: string };
 
 export class GameSettings {
     gameUid: string;
@@ -64,5 +67,22 @@ export class GameSettings {
 
     static getPointCounts(): number[] {
         return [30, 40, 50, 60];
+    }
+
+    static saveCurrentGame(game: Game) {
+        const data: TSavedGameData = { ...game.toJson(), uid: game.uid };
+        localStorage.setItem(CURRENT_GAME_KEY, JSON.stringify(data));
+    }
+
+    static getCurrentGame(): TSavedGameData | null {
+        const currentGameJson = localStorage.getItem(CURRENT_GAME_KEY);
+        if (currentGameJson) {
+            return JSON.parse(currentGameJson);
+        }
+        return null;
+    }
+
+    static hasCurrentGame() {
+        return localStorage.getItem(CURRENT_GAME_KEY);
     }
 }

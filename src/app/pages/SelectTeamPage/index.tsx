@@ -4,7 +4,7 @@ import { classNameBuilder } from 'als-services/className';
 import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { gameRepo } from 'als-db-manager';
 import { Loader } from 'als-components/Loader';
-import { Game, Team } from 'als-models';
+import { Game, Team, GameSettings } from 'als-models';
 import { teamIcons } from 'als-models/team';
 import { IAppContext, AppContext } from 'als-contexts/app';
 
@@ -51,6 +51,7 @@ export const SelectTeamPage: React.FC<IProps> = ({ history, match }: IProps) => 
                     } else {
                         teamIds.push(iconIndex);
                         gameRepo.save(game).then(() => {
+                            GameSettings.saveCurrentGame(game);
                             history.replace(`/teams/${game.uid}`, { gameData: game.toJson() });
                         });
                     }
