@@ -1,5 +1,7 @@
 const { resolve } = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const WebpackBar = require('webpackbar');
+
 const isProduction = process.env.NODE_ENV === 'production';
 const alias = require('./alias');
 const scssRule = {
@@ -49,5 +51,5 @@ module.exports = {
             { test: /\.txt$/, use: 'raw-loader' },
         ],
     },
-    plugins: [new MiniCssExtractPlugin({ filename: 'assets/[name].[hash].css' })],
+    plugins: [new MiniCssExtractPlugin({ filename: 'assets/[name].[hash].css' }), new WebpackBar()],
 };
