@@ -1,10 +1,11 @@
 import './styles.scss';
 import React from 'react';
 import { classNameBuilder } from 'als-services/className';
-import { AddToHomeScreenBtn } from 'als-pages/MainPage/AddToHomeScreenBtn';
-import { Link, useLocation, useHistory } from 'react-router-dom';
+import { AddToHomeScreenBtn } from 'als-components/AddToHomeScreenBtn';
+import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { GameSettings } from 'als-models';
+import { CurrentGameItem } from './GameContinueButton';
 
 type TMenuItem = {
     title: string;
@@ -29,15 +30,8 @@ const items: TMenuItem[] = [
 ];
 
 export const Drawer: React.FC<IProps> = ({ path }: IProps) => {
-    const history = useHistory();
     const drawer = document.getElementById('c-als-drawer');
 
-    const handleContinueGame = () => {
-        const gameData = GameSettings.getCurrentGame();
-        if (gameData) {
-            history.replace(`/teams/${gameData.uid}`, { ...gameData });
-        }
-    };
     return ReactDOM.createPortal(
         <div className={cn('')}>
             <input className={cn('toggle')} type="checkbox" id="drawer-toggle" />
@@ -58,17 +52,17 @@ export const Drawer: React.FC<IProps> = ({ path }: IProps) => {
                             </Link>
                         </li>
                     ))}
+                    {GameSettings.hasCurrentGame() &&
+                        !path.startsWith('/teams') &&
+                        !path.startsWith('/results') &&
+                        !path.startsWith('/game') && (
+                            <li className={cn('item')}>
+                                <CurrentGameItem />
+                            </li>
+                        )}
                     <li className={cn('item', { add2hs: true })}>
                         <AddToHomeScreenBtn />
                     </li>
-                    {GameSettings.hasCurrentGame() &&
-                        !path.startsWith('/teams') &&
-                        !path.startsWith('results') &&
-                        !path.startsWith('/game') && (
-                            <li className={cn('item')}>
-                                <button onClick={handleContinueGame}>Вернуться в игру</button>
-                            </li>
-                        )}
                 </ul>
             </nav>
         </div>,
