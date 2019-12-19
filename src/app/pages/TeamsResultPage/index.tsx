@@ -26,15 +26,6 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
     useEffect(() => {
         context.showHeader();
         context.setHeaderProps({ title: 'Команды' });
-    }, []);
-    const gameData = history.location.state ? history.location.state.gameData : null;
-    const gameUid = match.params.gameUid;
-    const [state, setState] = useState<IState>({
-        loaded: Boolean(gameData),
-        game: gameData ? new Game(gameUid, gameData) : null,
-    });
-    const { game, loaded } = state;
-    if (!loaded) {
         gameRepo
             .get(match.params.gameUid)
             .then(game => {
@@ -43,7 +34,14 @@ export const TeamsPage: React.FC<IProps> = ({ history, match }: IProps) => {
             .catch(() => {
                 setState({ ...state, loaded: true });
             });
-    }
+    }, []);
+    const gameData = history.location.state ? history.location.state.gameData : null;
+    const gameUid = match.params.gameUid;
+    const [state, setState] = useState<IState>({
+        loaded: Boolean(gameData),
+        game: gameData ? new Game(gameUid, gameData) : null,
+    });
+    const { game, loaded } = state;
 
     if (game) {
         const handleContinue = () => {

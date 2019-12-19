@@ -1,0 +1,18 @@
+@import 'styles/default/colors';
+
+.share-link {
+    &__copied {
+        display: block;
+        font-size: 0.6em;
+        text-transform: uppercase;
+        letter-spacing: 4px;
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s, opacity 0.2s linear;
+
+        &--visible {
+            visibility: visible;
+            opacity: 1;
+        }
+    }
+}

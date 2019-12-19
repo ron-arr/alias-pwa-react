@@ -2,7 +2,9 @@ import { TLevel, TRoundTime, IGameData } from 'als-data-types/game';
 import { Game } from 'als-models';
 import { getRandomString } from 'als-services/utils';
 
-const CURRENT_GAME_KEY = 'currentGame';
+const CURRENT_GAME_DATA_KEY = 'currentGame';
+const CURRENT_GAME_UID_KEY = 'currentGameUid';
+
 type TSavedGameData = IGameData & { uid: string };
 
 export class GameSettings {
@@ -70,19 +72,24 @@ export class GameSettings {
     }
 
     static saveCurrentGame(game: Game) {
-        const data: TSavedGameData = { ...game.toJson(), uid: game.uid };
-        localStorage.setItem(CURRENT_GAME_KEY, JSON.stringify(data));
+        localStorage.setItem(CURRENT_GAME_DATA_KEY, JSON.stringify(game.toJson()));
+        localStorage.setItem(CURRENT_GAME_UID_KEY, game.uid);
     }
 
     static getCurrentGame(): TSavedGameData | null {
-        const currentGameJson = localStorage.getItem(CURRENT_GAME_KEY);
-        if (currentGameJson) {
-            return JSON.parse(currentGameJson);
+        const currentGameJson = localStorage.getItem(CURRENT_GAME_DATA_KEY);
+        const currentGameUid = localStorage.getItem(CURRENT_GAME_UID_KEY);
+        if (currentGameJson && currentGameUid) {
+            return { uid: currentGameUid, ...JSON.parse(currentGameJson) };
         }
         return null;
     }
 
-    static hasCurrentGame() {
-        return localStorage.getItem(CURRENT_GAME_KEY);
+    static getCurrentGameUid() {
+        return localStorage.getItem(CURRENT_GAME_UID_KEY);
+    }
+
+    static resetGame() {
+        localStorage.clear();
     }
 }

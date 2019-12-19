@@ -2,7 +2,7 @@ import React from 'react';
 import { GameSettings } from 'als-models';
 import { Link } from 'react-router-dom';
 
-export const CurrentGameItem: React.FC = () => {
+export const BackCurrentGameLink: React.FC = () => {
     const gameData = GameSettings.getCurrentGame();
     if (gameData) {
         return (

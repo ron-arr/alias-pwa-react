@@ -5,7 +5,8 @@ import { AddToHomeScreenBtn } from 'als-components/AddToHomeScreenBtn';
 import { Link } from 'react-router-dom';
 import ReactDOM from 'react-dom';
 import { GameSettings } from 'als-models';
-import { CurrentGameItem } from './GameContinueButton';
+import { BackCurrentGameLink } from './BackCurrentGameLink';
+import { ShareLink } from './ShareLink';
 
 type TMenuItem = {
     title: string;
@@ -31,6 +32,8 @@ const items: TMenuItem[] = [
 
 export const Drawer: React.FC<IProps> = ({ path }: IProps) => {
     const drawer = document.getElementById('c-als-drawer');
+    const gameUid = GameSettings.getCurrentGameUid();
+    const gameStartPaths = ['/teams', '/results', '/game'];
 
     return ReactDOM.createPortal(
         <div className={cn('')}>
@@ -52,14 +55,17 @@ export const Drawer: React.FC<IProps> = ({ path }: IProps) => {
                             </Link>
                         </li>
                     ))}
-                    {GameSettings.hasCurrentGame() &&
-                        !path.startsWith('/teams') &&
-                        !path.startsWith('/results') &&
-                        !path.startsWith('/game') && (
+                    {gameUid && gameStartPaths.every(startPath => !path.startsWith(startPath)) ? (
+                        <li className={cn('item')}>
+                            <BackCurrentGameLink />
+                        </li>
+                    ) : (
+                        gameUid && (
                             <li className={cn('item')}>
-                                <CurrentGameItem />
+                                <ShareLink gameUid={gameUid} />
                             </li>
-                        )}
+                        )
+                    )}
                     <li className={cn('item', { add2hs: true })}>
                         <AddToHomeScreenBtn />
                     </li>
