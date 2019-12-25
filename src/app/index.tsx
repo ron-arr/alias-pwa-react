@@ -24,7 +24,7 @@ const ContextWrapper = ({ children }: IContextWrapperProps) => {
     return (
         <>
             {showHeader && <Header {...headerProps} />}
-            <AppContext.Provider value={context}>{children}</AppContext.Provider>;
+            <AppContext.Provider value={context}>{children}</AppContext.Provider>
         </>
     );
 };

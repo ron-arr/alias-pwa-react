@@ -29,10 +29,6 @@ const routes: IRoute[] = [
         component: lazy(() => import('als-pages/GamePage').then(module => ({ default: module.GamePage }))),
     },
     {
-        path: '/words',
-        component: lazy(() => import('als-pages/WordsPage').then(module => ({ default: module.WordsPage }))),
-    },
-    {
         path: '/loading',
         component: lazy(() => import('als-components/Loader').then(module => ({ default: module.Loader }))),
     },
@@ -43,6 +39,14 @@ const routes: IRoute[] = [
     {
         path: '/about',
         component: lazy(() => import('als-pages/AboutPage').then(module => ({ default: module.AboutPage }))),
+    },
+    {
+        path: '/words',
+        component: lazy(() => import('als-pages/WordsPage').then(module => ({ default: module.WordsPage }))),
+    },
+    {
+        path: '/dict',
+        component: lazy(() => import('als-pages/WordsDictPage').then(module => ({ default: module.WordsDictPage }))),
     },
 ];
 

@@ -22,7 +22,7 @@ interface IState {
     disabled: boolean;
     game: null | Game;
     status: TStatus;
-    words: string[];
+    words: string[] | null;
 }
 
 interface IProps extends RouteComponentProps<IRouterProps> {}
@@ -37,7 +37,7 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         disabled: false,
         game: gameData ? new Game(gameUid, gameData) : null,
         status: 'TEAM',
-        words: [],
+        words: null,
     });
     const { game, loaded, status, disabled, words } = state;
     useEffect(() => {
@@ -47,20 +47,21 @@ export const GamePage: React.FC<IProps> = ({ match, history }: IProps) => {
         } else {
             context.hideHeader();
         }
-    }, [game, status]);
-    if (game && !words.length) {
-        import('alias-words').then(module => {
-            let _words;
+        if (game && !words) {
+            let wordsModule;
             if (game.level === 3) {
-                _words = module.hard;
+                wordsModule = import('alias-words/hard');
             } else if (game.level === 2) {
-                _words = module.norm;
+                wordsModule = import('alias-words/norm');
             } else {
-                _words = module.easy;
+                wordsModule = import('alias-words/easy');
             }
-            setState({ ...state, words: shuffle(_words) });
-        });
-    }
+            wordsModule.then(module => {
+                setState({ ...state, words: shuffle(module.default) });
+            });
+        }
+    }, [game, status]);
+
     if (!loaded) {
         gameRepo
             .get(match.params.gameUid)

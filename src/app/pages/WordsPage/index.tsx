@@ -29,7 +29,7 @@ function count_words() {
 
 export const WordsPage: React.FC = () => {
     const [loaded, setLoaded] = useState(false);
-    const [disabled, setDisabled] = useState(false);
+    const [disabled, setDisabled] = useState(true);
 
     if (!loaded) {
         lastNumDoc.get().then(doc => {
@@ -51,7 +51,6 @@ export const WordsPage: React.FC = () => {
         lastNumDoc.set({ value: lastNum + num + 1 }).then(() => {
             wordsEasyRef.add({
                 value: words[num],
-                num: num,
             });
             setNum(num + 1);
             setDisabled(false);

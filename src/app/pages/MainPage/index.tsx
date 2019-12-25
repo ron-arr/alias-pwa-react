@@ -15,6 +15,7 @@ export const MainPage: React.FC = () => {
     const context = useContext<IAppContext>(AppContext);
     const [disabled, setDisabled] = useState(false);
     const history = useHistory();
+
     useEffect(() => {
         context.showHeader();
     }, []);

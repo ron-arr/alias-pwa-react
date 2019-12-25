@@ -29,8 +29,6 @@ const scssRule = {
         },
     ],
 };
-console.log(resolve(__dirname, '../'));
-
 module.exports = {
     entry: { app: resolve('src', 'app', 'index.tsx') },
     resolve: {

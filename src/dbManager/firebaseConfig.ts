@@ -14,5 +14,6 @@ var firebaseConfig = {
 // Initialize Firebase
 firebase.initializeApp(firebaseConfig);
 var db = firebase.firestore();
+var dbFieldValue = firebase.firestore.FieldValue;
 
-export { db, firestore };
+export { db, firestore, dbFieldValue };
