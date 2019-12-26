@@ -4,32 +4,42 @@ import { classNameBuilder } from 'als-services/className';
 import txt from 'alias-words/word_rus_shuffled.txt';
 import { Button } from 'als-ui/controls';
 import { db } from 'als-db-manager';
+import { getRandomString } from 'als-services/utils';
 
 let words: string[] = [];
 const LIMIT = 10;
 
 const cn = classNameBuilder('words');
 
-const wordsEasyRef = db.collection('wordsEasy');
-const wordsNormRef = db.collection('wordsNorm');
-const wordsHardRef = db.collection('wordsHard');
-const wordsIgnoreRef = db.collection('wordsIgnore');
-const settingsRef = db.collection('_settings');
-const lastNumDoc = settingsRef.doc('lastNum');
+const wordsRef = db.collection('words');
+const lastNumDoc = db.collection('_settings').doc('lastNum');
 
 let lastNum: number = 0;
 
 // @ts-ignore
 function count_words() {
-    wordsEasyRef.get().then(snap => console.log('wordsEasyRef', snap.size));
-    wordsNormRef.get().then(snap => console.log('wordsNormRef', snap.size));
-    wordsHardRef.get().then(snap => console.log('wordsHardRef', snap.size));
-    wordsIgnoreRef.get().then(snap => console.log('wordsIgnoreRef', snap.size));
+    wordsRef
+        .doc('easy')
+        .get()
+        .then(doc => console.log('easy', Object.keys(doc.data() as object).length));
+    wordsRef
+        .doc('norm')
+        .get()
+        .then(doc => console.log('norm', Object.keys(doc.data() as object).length));
+    wordsRef
+        .doc('hard')
+        .get()
+        .then(doc => console.log('hard', Object.keys(doc.data() as object).length));
+    wordsRef
+        .doc('ignore')
+        .get()
+        .then(doc => console.log('ignore', Object.keys(doc.data() as object).length));
 }
 
 export const WordsPage: React.FC = () => {
     const [loaded, setLoaded] = useState(false);
-    const [disabled, setDisabled] = useState(true);
+    const [disabled, setDisabled] = useState(false);
+    const [num, setNum] = useState(0);
 
     if (!loaded) {
         lastNumDoc.get().then(doc => {
@@ -45,49 +55,17 @@ export const WordsPage: React.FC = () => {
             setNum(0);
         });
     }
-    const [num, setNum] = useState(0);
-    const addToEasy = () => {
-        setDisabled(true);
-        lastNumDoc.set({ value: lastNum + num + 1 }).then(() => {
-            wordsEasyRef.add({
-                value: words[num],
+    const addTo = (level: 'easy' | 'norm' | 'hard' | 'ignore') => {
+        return () => {
+            setDisabled(true);
+            const batch = db.batch();
+            batch.set(lastNumDoc, { value: lastNum + num + 1 });
+            batch.update(wordsRef.doc(level), { [getRandomString()]: words[num].trim() });
+            batch.commit().then(() => {
+                setNum(num + 1);
+                setDisabled(false);
             });
-            setNum(num + 1);
-            setDisabled(false);
-        });
-    };
-    const addToNorm = () => {
-        setDisabled(true);
-        lastNumDoc.set({ value: lastNum + num + 1 }).then(() => {
-            wordsNormRef.add({
-                value: words[num],
-                num: num,
-            });
-            setNum(num + 1);
-            setDisabled(false);
-        });
-    };
-    const addToHard = () => {
-        setDisabled(true);
-        lastNumDoc.set({ value: lastNum + num + 1 }).then(() => {
-            wordsHardRef.add({
-                value: words[num],
-                num: num,
-            });
-            setNum(num + 1);
-            setDisabled(false);
-        });
-    };
-    const addToIgnore = () => {
-        setDisabled(true);
-        lastNumDoc.set({ value: lastNum + num + 1 }).then(() => {
-            wordsIgnoreRef.add({
-                value: words[num],
-                num: num,
-            });
-            setNum(num + 1);
-            setDisabled(false);
-        });
+        };
     };
 
     if (!loaded) {
@@ -105,19 +83,19 @@ export const WordsPage: React.FC = () => {
             <div className={cn('word')}>{words[num]}</div>
 
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Это элементарно" onAction={addToEasy} />
+                <Button disabled={disabled} type="secondary" text="Это элементарно" onAction={addTo('easy')} />
             </div>
             <div className={cn('help')}>Не самая очевидная форма слова</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Ну пойдет" onAction={addToNorm} />
+                <Button disabled={disabled} type="secondary" text="Ну пойдет" onAction={addTo('norm')} />
             </div>
             <div className={cn('help')}>Сложносочиненное или сложносоставное или редковстречаемое</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Трууудно" onAction={addToHard} />
+                <Button disabled={disabled} type="secondary" text="Трууудно" onAction={addTo('hard')} />
             </div>
             <div className={cn('help')}>Если слово совсем не знакомо или узкоспециализировано</div>
             <div className={cn('btn')}>
-                <Button disabled={disabled} type="secondary" text="Че такое" onAction={addToIgnore} />
+                <Button disabled={disabled} type="secondary" text="Че такое" onAction={addTo('ignore')} />
             </div>
         </div>
     );
