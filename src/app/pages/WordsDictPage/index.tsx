@@ -56,6 +56,8 @@ export const WordsDictPage: React.FC = () => {
                 updateLevelDoc(wordsRef.doc(level), wordsRef.doc('norm'), uid);
             } else if (level === 'norm') {
                 updateLevelDoc(wordsRef.doc(level), wordsRef.doc('hard'), uid);
+            } else if (level === 'hard') {
+                updateLevelDoc(wordsRef.doc(level), wordsRef.doc('ignore'), uid);
             }
         };
     };
@@ -93,6 +95,15 @@ export const WordsDictPage: React.FC = () => {
                                         type="secondary"
                                         text="-"
                                         onAction={changeLevelDown(uid)}
+                                    />
+                                )}
+                                {level === 'hard' && (
+                                    <Button
+                                        className={cn('change-btn')}
+                                        size="small"
+                                        type="secondary"
+                                        text="X"
+                                        onAction={changeLevelUp(uid)}
                                     />
                                 )}
                                 {['easy', 'norm'].includes(level) && (
