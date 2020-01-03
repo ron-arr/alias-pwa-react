@@ -44,7 +44,7 @@
     },
     "dependencies": {
         "@bem-react/classname": "^1.5.6",
-        "alias-words": "git+https://github.com/ron-arr/alias-words#v0.2.2",
+        "alias-words": "git+https://github.com/ron-arr/alias-words#v0.2.5",
         "firebase": "^7.4.0",
         "history": "^4.10.1",
         "react": "^16.12.0",
